@@ -1,0 +1,19 @@
+<div th:fragment="bottom" xmlns="http://www.w3.org/1999/html">
+    tlf. 12 34 56 78 - Vikarvej 17, Vikarby 1750 - info@vikarwork.dk - CVR: 123 456 789
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#countNotification').load('/notification');
+            refresh();
+
+        })
+
+        function refresh() {
+            setTimeout( function () {
+                $('#countNotification').load('/notification');
+                refresh();
+            }, 3000)
+        }
+    </script>
+</div>
