@@ -1,15 +1,15 @@
 package school.system.student_attendance.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class TeacherClass {
+@Table(name = "teacherClass", schema = "student_attendance", catalog = "")
+public class TeacherClass implements Serializable {
     private int teacherIdFk;
     private int classIdFk;
 
-    @Basic
+    @Id
     @Column(name = "teacherId_fk")
     public int getTeacherIdFk() {
         return teacherIdFk;
@@ -19,7 +19,7 @@ public class TeacherClass {
         this.teacherIdFk = teacherIdFk;
     }
 
-    @Basic
+    @Id
     @Column(name = "classId_fk")
     public int getClassIdFk() {
         return classIdFk;

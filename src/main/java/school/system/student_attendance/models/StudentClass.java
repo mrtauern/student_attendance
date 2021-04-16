@@ -1,15 +1,17 @@
 package school.system.student_attendance.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class StudentClass {
+@Table(name = "studentClass", schema = "student_attendance", catalog = "")
+public class StudentClass implements Serializable {
     private int studentIdFk;
     private int classIdFk;
 
-    @Basic
+    @Id
     @Column(name = "studentId_fk")
     public int getStudentIdFk() {
         return studentIdFk;
@@ -19,7 +21,7 @@ public class StudentClass {
         this.studentIdFk = studentIdFk;
     }
 
-    @Basic
+    @Id
     @Column(name = "classId_fk")
     public int getClassIdFk() {
         return classIdFk;
