@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class Sessions {
     private int id;
     private Timestamp date;
-    private int classIdFk;
+    private int courseIdFk;
     private String sessionCode;
 
     @Id
@@ -34,13 +34,13 @@ public class Sessions {
     }
 
     @Basic
-    @Column(name = "classId_fk")
-    public int getClassIdFk() {
-        return classIdFk;
+    @Column(name = "courseId_fk")
+    public int getCourseIdFk() {
+        return courseIdFk;
     }
 
-    public void setClassIdFk(int classIdFk) {
-        this.classIdFk = classIdFk;
+    public void setCourseIdFk(int courseIdFk) {
+        this.courseIdFk = courseIdFk;
     }
 
     @Basic
@@ -61,7 +61,7 @@ public class Sessions {
         Sessions sessions = (Sessions) o;
 
         if (id != sessions.id) return false;
-        if (classIdFk != sessions.classIdFk) return false;
+        if (courseIdFk != sessions.courseIdFk) return false;
         if (date != null ? !date.equals(sessions.date) : sessions.date != null) return false;
         if (sessionCode != null ? !sessionCode.equals(sessions.sessionCode) : sessions.sessionCode != null)
             return false;
@@ -73,7 +73,7 @@ public class Sessions {
     public int hashCode() {
         int result = id;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + classIdFk;
+        result = 31 * result + courseIdFk;
         result = 31 * result + (sessionCode != null ? sessionCode.hashCode() : 0);
         return result;
     }
