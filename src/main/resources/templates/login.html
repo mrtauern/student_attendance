@@ -1,20 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
-    <H1>Login</H1>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:href="http://www.w3.org/1999/xhtml">
+    <head th:include="fragments/head :: styles">
+        <!--<link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>-->
+    </head>
+    <body>
+        <div class="container">
+            <header th:include="fragments/header :: indexbar"></header>
 
-    <form method="POST" action="">
-        <label>Username: </label><br>
-        <input type="text" name="email" required><br>
+            <div id="inner_container">
 
-        <label>Password: </label><br>
-        <input type="password" name="password" required><br>
+                <H1>Login</H1>
 
-        <button type="submit">Login</button>
-    </form>
-</body>
+                <form method="POST" action="">
+                    <label>Username: </label><br>
+                    <input type="text" name="email" required><br>
+
+                    <label>Password: </label><br>
+                    <input type="password" name="password" required><br>
+
+                    <button type="submit">Login</button>
+                </form>
+
+            </div>
+
+            <footer th:include="fragments/footer :: bottom"></footer>
+        </div>
+    </body>
 </html>
