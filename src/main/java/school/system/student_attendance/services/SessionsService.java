@@ -17,5 +17,5 @@ public interface SessionsService {
 
     void delete(Sessions sessions);
 
-    String checkInCode(int len);
+    String checkInCode();
 }

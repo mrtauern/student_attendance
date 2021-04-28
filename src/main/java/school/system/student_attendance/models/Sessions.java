@@ -1,59 +1,39 @@
 package school.system.student_attendance.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.*;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
 
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class Sessions {
-    private int id;
-    private Timestamp date;
-    private int courseIdFk;
-    private String sessionCode;
+@Table(name = "sessions", schema = "student_attendance", catalog = "")
+public class Sessions implements Serializable {
 
     @Id
     @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;
 
     @Basic
     @Column(name = "date")
-    public Timestamp getDate() {
-        return date;
-    }
+    private Timestamp date;
 
-    public void setDate(Timestamp date) {
-        this.date = date;
-    }
-
-    @Basic
-    @Column(name = "courseId_fk")
-    public int getCourseIdFk() {
-        return courseIdFk;
-    }
-
-    public void setCourseIdFk(int courseIdFk) {
-        this.courseIdFk = courseIdFk;
-    }
+    //@Basic
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "courseid_fk")
+    private Courses course;
 
     @Basic
-    @Column(name = "sessionCode")
-    public String getSessionCode() {
-        return sessionCode;
-    }
+    @Column(name = "sessioncode")
+    private String sessionCode;
 
-    public void setSessionCode(String sessionCode) {
-        this.sessionCode = sessionCode;
-    }
-
-    @Override
+    /*@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -76,5 +56,5 @@ public class Sessions {
         result = 31 * result + courseIdFk;
         result = 31 * result + (sessionCode != null ? sessionCode.hashCode() : 0);
         return result;
-    }
+    }*/
 }

@@ -1,0 +1,383 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&subset=latin-ext');
+
+* {
+    font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+
+}
+
+body{
+    font-weight: 300;
+    padding-top: 40px;
+
+    height: 100%;
+    width: 100%;
+    position: absolute;
+
+    overflow: auto;
+
+}
+
+h1{
+    margin: 30px 0 50px 0;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+h1#error_header{
+    color: red;
+}
+
+h1.front_page{
+    font-weight: bold;
+    text-align: center;
+    background-color: #EFEFEF;
+    margin: 0;
+    padding: 30px 0 50px 0;
+}
+
+h1.front_page span.red{
+    color: #E74C3C;
+}
+
+h2{
+    margin: 20px 0 30px 0;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #E74C3C;
+}
+
+h3{
+    margin: 10px 0 20px 0;
+    font-weight: bold;
+    color: #E74C3C;
+}
+
+h4{
+    margin: 10px 0 20px 0;
+    font-weight: bold;
+}
+
+a.nav-link{
+    color: #FFFFFF;
+}
+
+a.nav-link.front_page{
+    border: solid 1px #E74C3C;
+    border-radius: 20px;
+    padding: 6px 20px !important;
+    color: #E74C3C !important;
+    margin-right: 15px;
+}
+
+a.nav-link.front_page:hover{
+    color: #343A40 !IMPORTANT;
+    background-color: #FFFFFF !important;
+    border-color: #FFFFFF !important;
+}
+
+a.nav-link.front_page.fill{
+    color: #343A40 !IMPORTANT;
+    background-color: #E74C3C;
+}
+
+p.errMsg{
+    color: #E74C3C;
+    font-size: 16px;
+
+}
+
+div.container{
+
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+div#left{
+    width: 50%;
+    min-height: calc( 100% - 61px);
+    float: left;
+    padding-top: 16px;
+}
+
+div#left form#filter{
+    width: 200%;
+    z-index: 1;
+    position: relative;
+}
+
+div#left form#filter button{
+    margin-left: 10px;
+}
+
+div#right{
+    width: 50%;
+    min-height: calc( 100% - 61px);
+    float: right;
+    padding-top: 192px;
+
+}
+
+div#inner_container{
+    width: 100%;
+    min-height: calc( 100% - 61px);
+    float: left;
+    padding-top: 21px;
+}
+
+nav.navbar{
+    height: 61px;
+    width: 100%;
+}
+
+div#productList{
+    width: 100%;
+    float: left;
+}
+
+div#productList a.productItem{
+    display: block;
+    width: 277px;
+    height: 277px;
+
+    text-align: center;
+    color: #000;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: 300;
+
+    float: left;
+
+    position: relative;
+}
+
+div#productList a.productItem img{
+    max-width: 90%;
+    max-height: 50%;
+
+    display: block;
+
+    margin: 0 auto 10px auto;
+}
+
+div#productList a.productItem span.productName{
+    display: block;
+
+    margin: 0 auto 10px auto;
+}
+
+div#productList a.productItem span.productPrice{
+    font-size: 13px;
+    color: #BBB;
+
+    display: block;
+
+    margin: 0 auto;
+}
+
+div#pageSelect{
+    width: 100%;
+
+    padding-bottom: 10px;
+
+    float: left;
+}
+
+div#productImage{
+
+}
+
+div#productImage img{
+    max-width: 100%;
+}
+
+div#productDetails{
+
+}
+
+div#productDetails p#productPrice{
+
+}
+
+div#aboutUsImage{
+
+}
+
+div#aboutUsImage img{
+    max-width: 100%;
+}
+
+div#aboutUsDetails{
+
+}
+
+div#map_container{
+    width:100%;
+    height:600px;
+}
+div#floating-panel{
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    z-index: 5;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #999;
+    text-align: center;
+    font-family: 'Roboto','sans-serif';
+    line-height: 30px;
+    padding-left: 10px;
+}
+
+div#apply{
+    background-color: #CCCCCC;
+    padding: 10px;
+    overflow: overlay;
+}
+
+div#apply span{
+    float: right;
+}
+
+div#apply h3{
+    float: left;
+    margin: 0;
+    padding: 3px 0 2px 0;
+    color: #000000;
+}
+
+div#workersOnAssignment{
+    background-color: #EEEEEE;
+    overflow: overlay;
+    padding: 10px;
+}
+
+div#workersOnAssignment span{
+    float: left;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+div#workersOnAssignment span i{
+    float: left;
+    padding-top: 5px;
+    padding-right: 5px;
+}
+
+div#workersOnAssignment span span{
+    width: fit-content;
+    margin: 0;
+}
+
+div#workersOnAssignment span span.accepted{
+    background-color: #28a745;
+    font-size: 12px;
+    color: #FFFFFF;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+}
+
+div#workersOnAssignment span:first-child{
+    margin: 0;
+}
+
+img.front_page{
+    width: 100%;
+}
+
+form input{
+    margin-bottom: 10px;
+}
+
+form input.form-control{
+    border: none;
+    border-bottom: solid 3px #000000;
+    border-radius: 0;
+}
+
+form select.form-control{
+    appearance: none;
+    border: none;
+    border-bottom: solid 3px #000000;
+    border-radius: 0;
+}
+
+form textarea.form-control{
+    border: dotted 1px #AAAAAA;
+    border-bottom: solid 3px #000000;
+    border-radius: 0;
+}
+
+form#search_form{
+    padding: 3px 12px 0 12px;
+
+}
+
+form#search_form input.form-control{
+    border-radius: 20px;
+    padding: 6px 20px !important;
+    border: none;
+}
+
+form#search_form input.form-control:focus{
+    border-color: #1ABC9C;
+}
+
+form#search_form button.btn.btn-primary{
+    border-radius: 20px;
+    padding: 7px 20px !important;
+    border: none;
+    font-weight: bold;
+}
+
+form.form-inline input{
+    margin-bottom: 0px;
+}
+
+form select{
+    margin-bottom: 10px;
+}
+
+form label{
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+span#countNotification{
+    background-color: #E74C3C;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 20px;
+    min-width: 20px;
+    width: fit-content;
+    display: block;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 12px;
+    margin-top: -15px;
+    margin-left: 5px;
+    padding: 0 6px;
+}
+
+span#logo{
+    font-weight: bold;
+    padding-left: 20px;
+}
+
+span#logo span.red{
+    color: #E74C3C;
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    height: 60px;
+    width: 100%;
+    float: left;
+}

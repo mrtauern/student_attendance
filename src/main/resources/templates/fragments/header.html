@@ -4,13 +4,13 @@
         <!-- Brand/logo -->
         <div class="container">
             <a class="navbar-brand" href="/landingPage">
-                <span id="logo">VIKAR <span class="red">WORK</span></span>
+                <span id="logo">Student <span class="red">Attendance</span></span>
             </a>
 
             <!-- Links -->
             <ul class="navbar-nav mr-5">
                 <li class="nav-item">
-                    <a class="nav-link" href="/landingPage">Forside</a>
+                    <a class="nav-link" href="/landingPage">Dashboard</a>
                 </li>
 
                 <li class="nav-item">
@@ -30,10 +30,10 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbardrop" href="#">Bruger Menu</a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbardrop" href="#">User menu</a>
                     <div class="dropdown-menu">
-                        <a href="/log_out" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Log af</a>
-                        <a href="/settings" class="dropdown-item"><i class="fas fa-user-edit"></i> Rediger oplysninger</a>
+                        <a href="/log_out" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Log out</a>
+                        <a href="/settings" class="dropdown-item"><i class="fas fa-user-edit"></i> Edit user information</a>
                         <a th:if="@{${loginType == 'w'}}" th:href="@{/showProfile}" class="dropdown-item"><i class="fas fa-address-card"></i> Se bruger oplysninger og CV</a>
                     </div>
                 </li>
@@ -48,20 +48,20 @@
         <!-- Brand/logo -->
         <div class="container">
             <a class="navbar-brand" href="/">
-                <span id="logo">VIKAR <span class="red">WORK</span></span>
+                <span id="logo">Student <span class="red">Attendance</span></span>
             </a>
 
             <!-- Links -->
             <ul class="navbar-nav mr-5">
                 <li class="nav-item">
-                    <a class="nav-link front_page" href="/login">Log ind</a>
+                    <a class="nav-link front_page fill" href="/login">Log in</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link front_page fill" href="/createUser">Opret bruger</a>
-                </li>
+                <!--<li class="nav-item">
+                    <a class="nav-link front_page fill" href="/createUser">Create user</a>
+                </li>-->
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/omOs">Om os</a>
+                    <a class="nav-link" href="/omOs">About us</a>
                 </li>
                 </li>
 

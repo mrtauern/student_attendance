@@ -43,7 +43,7 @@ public class HomeController {
     @GetMapping("/")
     public String index(HttpSession session, Model model){
 
-        log.info(sessionsService.checkInCode(6));
+        log.info(sessionsService.checkInCode());
 
         return INDEX;
     }
