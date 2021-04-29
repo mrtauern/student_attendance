@@ -7,5 +7,5 @@ import school.system.student_attendance.models.Students;
 
 @Qualifier("StudentsRepo")
 @Repository
-public interface StudentsRepo extends CrudRepository<Students, Long> {
+public interface StudentsRepo extends CrudRepository<Students, Integer> {
 }

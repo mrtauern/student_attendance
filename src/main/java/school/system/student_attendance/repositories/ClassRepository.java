@@ -7,6 +7,4 @@ import school.system.student_attendance.models.Classes;
 @Repository
 public interface ClassRepository extends JpaRepository<Classes, Integer> {
 
-    //Optional<Classes> findById(Long id);
-
 }
