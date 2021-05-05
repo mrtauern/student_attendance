@@ -13,37 +13,42 @@
 <div class="container">
 
   <header th:include="fragments/header :: indexbar"></header>
-  <H1>Student attendance</H1>
 
-  <h1>Student List</h1>
-  <a th:href="@{/createStudentForm}" >Create New Student</a>
-  <br/><br/>
-  <table border="1" cellpadding="10">
-    <thead>
-    <tr>
-      <th>Class ID</th>
-      <th>FirstName</th>
-      <th>LastName</th>
-      <th>Email</th>
-      <th>Password</th>
-      <td>Action</td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="student : ${listStudents}">
-      <td th:text="${student.id}">Student ID</td>
-      <td th:text="${student.firstname}">FirstName</td>
-      <td th:text="${student.lastname}">LastName</td>
-      <td th:text="${student.email}">Email</td>
-      <td th:text="${student.password}">Password</td>
-      <td>
-        <a th:href="@{/showStudentUpdateForm/{id}(id=${student.id})}">Edit</a>
-        <a th:href="@{/deleteStudent/{id}(id=${student.id})}">Delete</a>
+  <div id="inner_container">
+    <H1>Student attendance</H1>
 
-      </td>
-    </tr>
-    </tbody>
-  </table>
+    <h1>Student List</h1>
+    <a th:href="@{/createStudentForm}" >Create New Student</a>
+    <br/><br/>
+    <table border="1" cellpadding="10">
+      <thead>
+      <tr>
+        <th>Class ID</th>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Email</th>
+        <th>Password</th>
+        <td>Action</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="student : ${listStudents}">
+        <td th:text="${student.id}">Student ID</td>
+        <td th:text="${student.firstname}">FirstName</td>
+        <td th:text="${student.lastname}">LastName</td>
+        <td th:text="${student.email}">Email</td>
+        <td th:text="${student.password}">Password</td>
+        <td>
+          <a th:href="@{/showStudentUpdateForm/{id}(id=${student.id})}">Edit</a>
+          <a th:href="@{/deleteStudent/{id}(id=${student.id})}">Delete</a>
+
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
 </div>
 
 </body>

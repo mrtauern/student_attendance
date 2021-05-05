@@ -12,13 +12,17 @@
 <div class="container">
   <header th:include="fragments/header :: indexbar"></header>
 
-  <h1>Update class</h1>
+  <div id="inner_container">
 
-  <form action="#" th:action="@{/saveClass}" th:object ="${classes}" method="POST">
-    <input type="hidden" th:field="*{id}" />
-    <input type="text" th:field = "*{classname}"  class="form-control mb-4 col-4">
-    <button type="submit" class="form-control mb-4 col-4" >Update class</button>
-  </form>
+    <h1>Update class</h1>
+
+    <form action="#" th:action="@{/saveClass}" th:object ="${classes}" method="POST">
+      <input type="hidden" th:field="*{id}" />
+      <input type="text" th:field = "*{classname}"  class="form-control mb-4 col-4">
+      <button type="submit" class="form-control mb-4 col-4" >Update class</button>
+    </form>
+  </div>
+
 </div>
 
 </body>

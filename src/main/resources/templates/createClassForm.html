@@ -10,12 +10,16 @@
 <body>
   <div class="container">
       <header th:include="fragments/header :: indexbar"></header>
-      <h1>create class</h1>
 
-      <form action="#" th:action="@{/saveClass}" th:object ="${classes}" method="POST">
-          <input type="text" th:field = "*{classname}" placeholder=" class name" class="form-control mb-4 col-4">
-            <button type="submit" class="form-control mb-4 col-4" >create class</button>
-      </form>
+      <div id="inner_container">
+          <h1>create class</h1>
+
+          <form action="#" th:action="@{/saveClass}" th:object ="${classes}" method="POST">
+              <input type="text" th:field = "*{classname}" placeholder=" class name" class="form-control mb-4 col-4">
+              <button type="submit" class="form-control mb-4 col-4" >create class</button>
+          </form>
+      </div>
+
   </div>
 </body>
 </html>
