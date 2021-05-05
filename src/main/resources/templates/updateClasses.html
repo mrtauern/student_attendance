@@ -10,13 +10,19 @@
 <body>
 
 <div class="container">
-  <h1>Update class</h1>
+  <header th:include="fragments/header :: indexbar"></header>
 
-  <form action="#" th:action="@{/saveClass}" th:object ="${classes}" method="POST">
-    <input type="hidden" th:field="*{id}" />
-    <input type="text" th:field = "*{classname}"  class="form-control mb-4 col-4">
-    <button type="submit" >Update class</button>
-  </form>
+  <div id="inner_container">
+
+    <h1>Update class</h1>
+
+    <form action="#" th:action="@{/saveClass}" th:object ="${classes}" method="POST">
+      <input type="hidden" th:field="*{id}" />
+      <input type="text" th:field = "*{classname}"  class="form-control mb-4 col-4">
+      <button type="submit" class="form-control mb-4 col-4" >Update class</button>
+    </form>
+  </div>
+
 </div>
 
 </body>

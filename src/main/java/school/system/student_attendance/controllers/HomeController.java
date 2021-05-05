@@ -41,6 +41,9 @@ public class HomeController {
     private final String CLASSES = "classes";
     private final String CREATECLASSFORM = "createClassForm";
     private final String UPDATECLASSES = "updateClasses";
+    private final String STUDENTS = "students";
+    private final String CREATESTUDENTFORM = "createStudentForm";
+    private final String UPDATESTUDENT = "updateStudents";
 
     @GetMapping("/")
     public String index(HttpSession session, Model model){
@@ -157,4 +160,42 @@ public class HomeController {
         log.info("  GetMapping deleteClass is called ");
         return REDIRECT+CLASSES;
     }
+
+    //----------
+    @GetMapping("/students")
+    public String students(HttpSession session, Model model){
+        model.addAttribute("listStudents", studentsService.getAllStudents());
+        log.info("  get mapping Students is called");
+        return STUDENTS;
+    }
+
+    @GetMapping("/createStudentForm")
+    public String createStudentForm(Model model) {
+        Students students = new Students();
+        model.addAttribute("students", students);
+        log.info("  createStudentForm is called ");
+        return CREATESTUDENTFORM;
+    }
+    @PostMapping("/saveStudent")
+    public String saveSTUDENT (@ModelAttribute("student") Students students){
+        studentsService.saveStudent(students);
+        log.info("  PostMapping saveClass is called ");
+        return REDIRECT+STUDENTS;
+    }
+    @GetMapping("/showStudentUpdateForm/{id}")
+    public String showStudentUpdateForm(@PathVariable( value = "id") int id, Model model){
+        Students students = studentsService.getStudentById(id);
+        model.addAttribute("students", students);
+        log.info("  GetMapping showStudentUpdateForm is called ");
+
+        return UPDATESTUDENT;
+    }
+
+    @GetMapping("/deleteStudent/{id}")
+    public String deleteStudent(@PathVariable (value = "id") int id){
+        this.studentsService.deleteStudentById(id);
+        log.info("  GetMapping deleteClass is called ");
+        return REDIRECT+STUDENTS;
+    }
+
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <title>Create Student Form</title>
+</head>
+<body>
+    <div class="container">
+        <header th:include="fragments/header :: indexbar"></header>
+
+        <div id="inner_container">
+            <h1>Create Student</h1>
+
+            <form action="#" th:action="@{/saveStudent}" th:object ="${students}" method="POST">
+                <input type="text" th:field = "*{firstname}" placeholder=" First Name" class="form-control mb-4 col-4">
+                <input type="text" th:field = "*{lastname}" placeholder=" Last Name" class="form-control mb-4 col-4">
+                <input type="text" th:field = "*{email}" placeholder=" Email" class="form-control mb-4 col-4">
+                <input type="text" th:field = "*{password}" required placeholder=" Password" class="form-control mb-4 col-4">
+                <button type="submit" class="form-control mb-4 col-4" >Create Student</button>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>
