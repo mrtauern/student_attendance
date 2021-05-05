@@ -43,7 +43,7 @@ public class HomeController {
     private final String UPDATECLASSES = "updateClasses";
     private final String STUDENTS = "students";
     private final String CREATESTUDENTFORM = "createStudentForm";
-    private final String UPDATESTUDENT = "updateStudent";
+    private final String UPDATESTUDENT = "updateStudents";
 
     @GetMapping("/")
     public String index(HttpSession session, Model model){
