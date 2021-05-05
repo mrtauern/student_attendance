@@ -159,9 +159,10 @@ public class HomeController {
             return CREATE_CLASS;
         }
     }
-
+    /*
     @GetMapping("/class_add_session/{id}")
     private String class_add_sessions(HttpSession session, Model model, @PathVariable("id") int id) {
+        log.info("Called getmapping class_add_session id="+id);
         if(checkLogin(session) == false) {
             return REDIRECT+LOGIN;
         }else {
@@ -174,5 +175,5 @@ public class HomeController {
 
             return CLASS_ADD_SESSIONS;
         }
-    }
+    }*/
 }

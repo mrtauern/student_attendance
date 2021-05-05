@@ -34,7 +34,7 @@ public class Sessions {
     }
 
     @Basic
-    @Column(name = "courseId_fk")
+    @Column(name = "courseid_fk")
     public int getCourseIdFk() {
         return courseIdFk;
     }
@@ -44,7 +44,7 @@ public class Sessions {
     }
 
     @Basic
-    @Column(name = "sessionCode")
+    @Column(name = "sessioncode")
     public String getSessionCode() {
         return sessionCode;
     }
