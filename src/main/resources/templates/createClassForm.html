@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:include="fragments/head :: styles">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta charset="UTF-8">
@@ -9,11 +9,12 @@
 </head>
 <body>
   <div class="container">
+      <header th:include="fragments/header :: indexbar"></header>
       <h1>create class</h1>
 
       <form action="#" th:action="@{/saveClass}" th:object ="${classes}" method="POST">
           <input type="text" th:field = "*{classname}" placeholder=" class name" class="form-control mb-4 col-4">
-            <button type="submit" >create class</button>
+            <button type="submit" class="form-control mb-4 col-4" >create class</button>
       </form>
   </div>
 </body>

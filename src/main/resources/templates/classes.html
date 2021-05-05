@@ -12,7 +12,9 @@
 <body>
 <H1>Student attendance</H1>
 
-<div align="center">
+<div class="container">
+    <header th:include="fragments/header :: indexbar"></header>
+
     <h1>Class List</h1>
     <!-- <a href="/new">Create New Class</a> -->
     <a th:href="@{/createClassForm}" >Create New Class</a>

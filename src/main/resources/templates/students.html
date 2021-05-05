@@ -10,22 +10,24 @@
   <title>Students</title>
 </head>
 <body>
-<H1>Student attendance</H1>
+<div class="container">
 
-<div align="center">
+  <header th:include="fragments/header :: indexbar"></header>
+  <H1>Student attendance</H1>
+
   <h1>Student List</h1>
   <a th:href="@{/createStudentForm}" >Create New Student</a>
   <br/><br/>
   <table border="1" cellpadding="10">
     <thead>
-      <tr>
-        <th>Class ID</th>
-        <th>FirstName</th>
-        <th>LastName</th>
-        <th>Email</th>
-        <th>Password</th>
-        <td>Action</td>
-      </tr>
+    <tr>
+      <th>Class ID</th>
+      <th>FirstName</th>
+      <th>LastName</th>
+      <th>Email</th>
+      <th>Password</th>
+      <td>Action</td>
+    </tr>
     </thead>
     <tbody>
     <tr th:each="student : ${listStudents}">
@@ -43,5 +45,6 @@
     </tbody>
   </table>
 </div>
+
 </body>
 </html>
