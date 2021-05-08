@@ -2,15 +2,13 @@ package school.system.student_attendance.controllers;
 
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import school.system.student_attendance.models.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import school.system.student_attendance.services.ClassesService;
-import school.system.student_attendance.services.SessionsService;
+import school.system.student_attendance.services.ClassService;
 import school.system.student_attendance.services.StudentsService;
 import school.system.student_attendance.services.TeachersService;
 
@@ -30,6 +28,9 @@ public class HomeController {
 
     @Autowired
     TeachersService teachersService;
+    @Autowired
+    private ClassService classService;
+
 
     @Autowired
     ClassesService classesService;
@@ -45,6 +46,12 @@ public class HomeController {
     private final String LOGIN = "login";
     private final String CREATE_CLASS = "create_class";
     private final String CLASS_ADD_SESSIONS = "class_add_session";
+    private final String CLASSES = "classes";
+    private final String CREATECLASSFORM = "createClassForm";
+    private final String UPDATECLASSES = "updateClasses";
+    private final String STUDENTS = "students";
+    private final String CREATESTUDENTFORM = "createStudentForm";
+    private final String UPDATESTUDENT = "updateStudents";
 
     @GetMapping("/")
     public String index(HttpSession session, Model model){
@@ -176,4 +183,80 @@ public class HomeController {
             return CLASS_ADD_SESSIONS;
         }
     }*/
+    //@GetMapping("/landing_page")
+    //public String landing_page
+
+
+    @GetMapping("/classes")
+    public String classes(HttpSession session, Model model){
+        model.addAttribute("listClasses", classService.getAllClasses());
+        log.info("  get mapping Clases is called");
+        return CLASSES;
+    }
+
+    @GetMapping("/createClassForm")
+    public String createClassForm(Model model) {
+        Classes classes = new Classes();
+        model.addAttribute("classes", classes);
+        log.info("  createClassForm is called ");
+        return CREATECLASSFORM;
+    }
+    @PostMapping("/saveClass")
+    public String saveClass (@ModelAttribute("class") Classes classes){
+        classService.saveClass(classes);
+        log.info("  PostMapping saveClass is called ");
+        return REDIRECT+CLASSES;
+    }
+    @GetMapping("/showClassUpdateForm/{id}")
+    public String showClassUpdateForm(@PathVariable( value = "id") int id, Model model){
+        Classes classes = classService.getClassById(id);
+        model.addAttribute("classes", classes);
+        log.info("  GetMapping showClassUpdateForm is called ");
+
+        return UPDATECLASSES;
+    }
+
+    @GetMapping("/deleteClass/{id}")
+    public String deleteClass(@PathVariable (value = "id") int id){
+        this.classService.deleteClassById(id);
+        log.info("  GetMapping deleteClass is called ");
+        return REDIRECT+CLASSES;
+    }
+
+    @GetMapping("/students")
+    public String students(HttpSession session, Model model){
+        model.addAttribute("listStudents", studentsService.getAllStudents());
+        log.info("  get mapping Students is called");
+        return STUDENTS;
+    }
+
+    @GetMapping("/createStudentForm")
+    public String createStudentForm(Model model) {
+        Students students = new Students();
+        model.addAttribute("students", students);
+        log.info("  createStudentForm is called ");
+        return CREATESTUDENTFORM;
+    }
+    @PostMapping("/saveStudent")
+    public String saveSTUDENT (@ModelAttribute("student") Students students){
+        studentsService.saveStudent(students);
+        log.info("  PostMapping saveClass is called ");
+        return REDIRECT+STUDENTS;
+    }
+    @GetMapping("/showStudentUpdateForm/{id}")
+    public String showStudentUpdateForm(@PathVariable( value = "id") int id, Model model){
+        Students students = studentsService.getStudentById(id);
+        model.addAttribute("students", students);
+        log.info("  GetMapping showStudentUpdateForm is called ");
+
+        return UPDATESTUDENT;
+    }
+
+    @GetMapping("/deleteStudent/{id}")
+    public String deleteStudent(@PathVariable (value = "id") int id){
+        this.studentsService.deleteStudentById(id);
+        log.info("  GetMapping deleteClass is called ");
+        return REDIRECT+STUDENTS;
+    }
+
 }
