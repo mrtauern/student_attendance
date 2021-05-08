@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import school.system.student_attendance.services.ClassService;
+import school.system.student_attendance.services.CoursesService;
 import school.system.student_attendance.services.StudentsService;
 import school.system.student_attendance.services.TeachersService;
 
@@ -28,8 +29,12 @@ public class HomeController {
 
     @Autowired
     TeachersService teachersService;
+
     @Autowired
     private ClassService classService;
+
+    @Autowired
+    private CoursesService coursesService;
 
 
     Logger log = Logger.getLogger(HomeController.class.getName());
@@ -44,6 +49,7 @@ public class HomeController {
     private final String STUDENTS = "students";
     private final String CREATESTUDENTFORM = "createStudentForm";
     private final String UPDATESTUDENT = "updateStudents";
+    private final String COURSES = "courses";
 
     @GetMapping("/")
     public String index(HttpSession session, Model model){
@@ -196,6 +202,14 @@ public class HomeController {
         this.studentsService.deleteStudentById(id);
         log.info("  GetMapping deleteClass is called ");
         return REDIRECT+STUDENTS;
+    }
+
+    //--- COURSES ---
+    @GetMapping("/courses")
+    public String courses(HttpSession session, Model model) {
+        log.info("Courses getmapping called...");
+        model.addAttribute("listCourses", coursesService.getAllCourses());
+        return COURSES;
     }
 
 }
