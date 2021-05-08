@@ -2,18 +2,16 @@ package school.system.student_attendance.controllers;
 
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import school.system.student_attendance.models.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import school.system.student_attendance.services.ClassService;
-import school.system.student_attendance.services.StudentsService;
-import school.system.student_attendance.services.TeachersService;
+import school.system.student_attendance.services.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Controller
@@ -28,9 +26,9 @@ public class HomeController {
 
     @Autowired
     TeachersService teachersService;
+    
     @Autowired
     private ClassService classService;
-
 
     @Autowired
     ClassesService classesService;
@@ -217,7 +215,7 @@ public class HomeController {
     }
 
     @GetMapping("/deleteClass/{id}")
-    public String deleteClass(@PathVariable (value = "id") int id){
+    public String deleteClass(@PathVariable(value = "id") int id){
         this.classService.deleteClassById(id);
         log.info("  GetMapping deleteClass is called ");
         return REDIRECT+CLASSES;
