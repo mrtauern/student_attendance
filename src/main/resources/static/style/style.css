@@ -373,6 +373,15 @@ span#logo span.red{
     color: #E74C3C;
 }
 
+.attended{
+    color: #218838;
+    font-weight: bold;
+}
+
+.notAttended{
+    color: #C82332;
+    font-weight: bold;
+}
 
 footer {
     text-align: center;

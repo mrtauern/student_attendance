@@ -39,6 +39,9 @@ public class Teachers implements Serializable {
     @ManyToMany(mappedBy = "teachers")
     private List<Courses> courses = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "teachers")
+    private List<Classes> classes = new ArrayList<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

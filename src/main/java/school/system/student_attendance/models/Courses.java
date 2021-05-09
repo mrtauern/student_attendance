@@ -36,6 +36,18 @@ public class Courses {
     )
     private List<Teachers> teachers = new ArrayList<>();
 
+    @ManyToMany(cascade = {
+            CascadeType.ALL
+    })
+    @JoinTable(name = "studentcourse",
+            joinColumns = @JoinColumn(name = "courseid_fk"),
+            inverseJoinColumns = @JoinColumn(name = "studentid_fk")
+    )
+    private List<Students> students = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "courses")
+    private List<Classes> classes = new ArrayList<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

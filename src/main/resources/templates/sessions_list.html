@@ -15,18 +15,21 @@
       <thead class="thead-dark">
       <tr>
         <th>Date</th>
-        <th>Course id</th>
-        <th>Session code</th>
+        <th>Course</th>
         <th>Teachers</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
       <tr th:each="s : ${sessions}">
-        <td th:text="${s.date}"></td>
+        <td th:text="${#dates.format(s.date, 'HH:mm dd/MM/yyyy')}"></td>
         <td th:text="${s.course.name}"></td>
-        <td th:text="${s.sessionCode}"></td>
         <td>
-          <span th:each="t : ${s.course.teachers}" th:text="${t.firstname + ' ' + t.lastname}"></span>
+          <span th:each="t : ${s.course.teachers}" th:text="${t.firstname + ' ' + t.lastname + ', '}"></span>
+        </td>
+        <td>
+          <a th:href="${'/reveal_code/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-eye"></i> Reveal code</a>
+          <a th:href="${'/session_info/' + s.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-ellipsis-h"></i> More</a>
         </td>
       </tr>
       </tbody>

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -32,6 +33,9 @@ public class Sessions implements Serializable {
     @Basic
     @Column(name = "sessioncode")
     private String sessionCode;
+
+    @OneToMany(mappedBy="session")
+    private Set<Attendance> attendances;
 
     /*@Override
     public boolean equals(Object o) {
