@@ -10,41 +10,47 @@
   <title>Index</title>
 </head>
 <body>
-<H1>Courses</H1>
+<H1>Student attendance</H1>
 
 <div class="container">
   <header th:include="fragments/header :: indexbar"></header>
 
   <div id="inner_container">
 
-    <h1>Course List</h1>
+    <h1>Course <span th:text="${course.getName()}"></span></h1>
+    <h2>Current classes</h2>
     <!-- <a href="/new">Create New Class</a> -->
-    <a th:href="@{/createCourseForm}" >Create New Course</a>
+    <a th:href="@{/createClassForm}" >Create New Class</a>
     <br/><br/>
     <table border="1" cellpadding="10">
       <thead>
       <tr>
-        <th>Course ID</th>
+        <th>Class ID</th>
         <th>Name</th>
         <td>Action</td>
 
       </tr>
       </thead>
       <tbody>
-      <tr th:each="course : ${listCourses}">
-        <td th:text="${course.id}">Course ID</td>
-        <td th:text="${course.name}">Course Name</td>
+      <tr th:each="class : ${classes}">
+        <td th:text="${class.id}">Class ID</td>
+        <td th:text="${class.classname}">Class Name</td>
         <td>
-          <a th:href="@{/showCourseUpdateForm/{id}(id=${course.id})}">Edit</a>
-          <a th:href="@{/deleteCourse/{id}(id=${course.id})}">Delete</a>
-          <a th:href="@{/addClassToCourse/{id}(id=${course.id})}">Classes</a>
-          <!--  <a th:href="/@{'/edit/' + ${product.id}}">Edit</a> -->
-          &nbsp;&nbsp;&nbsp;
-          <!-- <a th:href="/@{'/delete/' + ${product.id}}">Delete</a> -->
+          <a th:href="@{/showClassUpdateForm/{id}(id=${class.id})}">Edit</a>
+          <a th:href="@{/removeClassFromCourse/{id}(id=${class.id})}">Remove From Course</a>
         </td>
       </tr>
       </tbody>
     </table>
+    <form type="POST" th:action="@{/addClassToCourse/{id}(id=${course.id})}">
+      <select id="Class" name="Class">
+        <span th:each="class : ${allClasses}">
+          <option th:value="${class.id}" th:text="${class.classname}"></option>
+        </span>
+      </select>
+      <button>Add to Course</button>
+
+    </form>
 
   </div>
 

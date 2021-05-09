@@ -2,6 +2,7 @@ package school.system.student_attendance.controllers;
 
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import school.system.student_attendance.models.*;
 import org.springframework.stereotype.Controller;
@@ -9,12 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import school.system.student_attendance.services.ClassService;
-import school.system.student_attendance.services.CoursesService;
-import school.system.student_attendance.services.StudentsService;
-import school.system.student_attendance.services.TeachersService;
+import school.system.student_attendance.services.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Controller
@@ -36,6 +37,10 @@ public class HomeController {
     @Autowired
     private CoursesService coursesService;
 
+    @Qualifier(value = "CourseClassService")
+    @Autowired
+    public CourseClassService courseClassService;
+
 
     Logger log = Logger.getLogger(HomeController.class.getName());
 
@@ -50,6 +55,7 @@ public class HomeController {
     private final String CREATESTUDENTFORM = "createStudentForm";
     private final String UPDATESTUDENT = "updateStudents";
     private final String COURSES = "courses";
+    private final String ADDCLASSTOCOURSE = "addClassToCourse";
 
     @GetMapping("/")
     public String index(HttpSession session, Model model){
@@ -212,4 +218,38 @@ public class HomeController {
         return COURSES;
     }
 
+    @GetMapping("/addClassToCourse/{courseId}")
+    public String addClassToCourse(@PathVariable (value = "courseId") long courseId, HttpSession session, Model model) {
+        log.info("addClassToCourse getmapping called with id="+courseId);
+
+        List<CourseClass> classesByCourseId = courseClassService.getClassesByCourseId(courseId);
+
+        List<Classes> classesInCourse = new ArrayList<>();
+        //List<Courses> courseList = new ArrayList<>();
+        int intCourseId = (int) courseId;
+        Courses course = coursesService.getCourseById(intCourseId);
+
+        for (CourseClass c: classesByCourseId) {
+            Classes tempClass = classService.getClassById(c.getClassIdFk());
+            classesInCourse.add(classService.getClassById(c.getCourseIdFk()));
+
+            /*
+            Courses tempCourse = coursesService.getCourseById(c.getCourseIdFk());
+            courseList.add(tempCourse);
+            */
+        }
+
+        model.addAttribute("course", course);
+        model.addAttribute("classes", classesInCourse);
+        model.addAttribute("allClasses", classService.getAllClasses());
+
+        return ADDCLASSTOCOURSE;
+    }
+/*
+    @PostMapping("/addClassToCourse/{courseId}")
+    public String saveClassToCourse(@ModelAttribute("CourseClass") CourseClass courseClass, @PathVariable(value = "courseId") long courseId, HttpSession session, Model model) {
+
+        return ADDCLASSTOCOURSE;
+    }
+*/
 }

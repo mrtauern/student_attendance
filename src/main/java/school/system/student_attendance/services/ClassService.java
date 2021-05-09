@@ -5,7 +5,7 @@ import school.system.student_attendance.models.Classes;
 
 import java.util.List;
 
-@Service
+@Service("ClassService")
 public interface ClassService {
 
     List<Classes> getAllClasses();

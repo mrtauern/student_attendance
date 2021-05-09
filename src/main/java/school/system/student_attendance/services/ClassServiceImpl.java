@@ -5,10 +5,11 @@ import org.springframework.stereotype.Service;
 import school.system.student_attendance.models.Classes;
 import school.system.student_attendance.repositories.ClassRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@Service("ClassService")
 public class ClassServiceImpl implements ClassService {
 
     @Autowired
