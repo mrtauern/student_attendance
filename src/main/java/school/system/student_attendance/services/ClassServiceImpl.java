@@ -3,6 +3,7 @@ package school.system.student_attendance.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import school.system.student_attendance.models.Classes;
+import school.system.student_attendance.models.Courses;
 import school.system.student_attendance.repositories.ClassRepository;
 
 import java.util.ArrayList;
@@ -42,6 +43,35 @@ public class ClassServiceImpl implements ClassService {
     @Override
     public void deleteClassById(int Id) {
         this.classRepository.deleteById(Id);
+    }
+
+    @Override
+    public List<Classes> getAllClassesNotInCourse(Courses course) {
+        List<Classes> allClasses = getAllClasses();
+        List<Classes> classesNotInCourse = new ArrayList<>();
+        List<Integer> usedIds = new ArrayList<>();
+        Boolean used = false;
+
+        for (Classes c: course.getClasses()) {
+            usedIds.add(c.getId());
+        }
+
+        for (Classes c: allClasses) {
+            for (Integer id: usedIds) {
+                if(c.getId() == id) {
+                    used = true;
+                }
+            }
+
+            if(used != true) {
+                classesNotInCourse.add(c);
+                usedIds.add(c.getId());
+            }
+            used = false;
+        }
+
+
+        return classesNotInCourse;
     }
 
 }

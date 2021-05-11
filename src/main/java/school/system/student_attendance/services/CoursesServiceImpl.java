@@ -32,4 +32,9 @@ public class CoursesServiceImpl implements CoursesService {
         }
         return course;
     }
+
+    @Override
+    public void save(Courses course) {
+        coursesRepo.save(course);
+    }
 }

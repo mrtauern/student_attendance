@@ -223,59 +223,34 @@ public class HomeController {
     public String addClassToCourse(@PathVariable (value = "courseId") long courseId, HttpSession session, Model model) {
         log.info("addClassToCourse getmapping called with id="+courseId);
 
-        //Courses course = coursesService.getCourseById(1);
-        //Classes classe = classService.getClassById(1);
+        Courses course = coursesService.getCourseById((int)courseId);
+        List<Classes> classesInCourse = course.getClasses();
 
-        //List<CourseClass> classesByCourseId = courseClassService.getClassesByCourseId(courseId);
-        //List<CourseClass> classesNiC = courseClassService.getAllClassesNotInCourse(courseId);
+        List<Classes> classesNotInCourse = classService.getAllClassesNotInCourse(course);
 
-        //List<Classes> classesInCourse = new ArrayList<>();
-        //List<Courses> courseList = new ArrayList<>();
-        //nt intCourseId = (int) courseId;
-        //Courses course = coursesService.getCourseById(intCourseId);
+        CourseClass newCourseClass = new CourseClass();
 
-        //CourseClass newCourseClass = new CourseClass();
-
-        /*
-        for (CourseClass c: classesByCourseId) {
-            //log.info("classId="+c.getClassIdFk());
-            Classes tempClass = new Classes();
-            tempClass = classService.getClassById(c.getClassIdFk());
-            classesInCourse.add(tempClass);
-
-            /*
-            Courses tempCourse = coursesService.getCourseById(c.getCourseIdFk());
-            courseList.add(tempCourse);
-            */ /*
-        }*/
-
-
-        //List<Classes> classesNotInCourse = new ArrayList<>();
-        /*
-        for (CourseClass c: classesNiC) {
-
-            Classes tempClass = new Classes();
-            tempClass = classService.getClassById(c.getClassIdFk());
-            classesNotInCourse.add(tempClass);
-        }*/
-
-        //model.addAttribute("course", course);
-        //model.addAttribute("classes", "Hello");
-        //model.addAttribute("allClasses", classesNotInCourse);
-        //model.addAttribute("newCourseClass", newCourseClass);
+        model.addAttribute("course", course);
+        model.addAttribute("courseId", ""+courseId);
+        model.addAttribute("classes", classesInCourse);
+        model.addAttribute("allClasses", classesNotInCourse);
+        model.addAttribute("newCourseClass", newCourseClass);
 
         return ADDCLASSTOCOURSE;
     }
 
     @PostMapping("/addClassToCourse")
-    public String saveClassToCourse(@ModelAttribute("courseClass") CourseClass courseClass, HttpSession session) {
-        log.info("saving courseClass");
-        //courseClassService.save(courseClass);
-        //CourseClass courseClass1 = new CourseClass();
-        //courseClass1.setCourseIdFk(1);
-        //courseClass1.setCourseIdFk(3);
-        //courseClassService.save(courseClass);
-        return REDIRECT+ADDCLASSTOCOURSE;
+    public String saveClassToCourse(@ModelAttribute("courseClass") CourseClass newCourseClass, HttpSession session) {
+        log.info("saving courseClass courseId="+newCourseClass.getCourseIdFk()+" classId="+newCourseClass.getClassIdFk());
+
+        Classes newClass = classService.getClassById(newCourseClass.getClassIdFk());
+        Courses test = coursesService.getCourseById(newCourseClass.getCourseIdFk());
+
+        newClass.getCourses().add(test);
+
+        classService.saveClass(newClass);
+
+        return REDIRECT+ADDCLASSTOCOURSE+"/"+newCourseClass.getCourseIdFk();
     }
 
 }

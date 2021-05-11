@@ -11,4 +11,6 @@ public interface CoursesService {
     List<Courses> getAllCourses();
 
     Courses getCourseById(int courseId);
+
+    void save(Courses course);
 }
