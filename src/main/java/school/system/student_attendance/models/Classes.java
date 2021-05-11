@@ -68,4 +68,12 @@ public class Classes {
         result = 31 * result + (classname != null ? classname.hashCode() : 0);
         return result;
     }
+
+    public List<Courses> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Courses> courses) {
+        this.courses = courses;
+    }
 }
