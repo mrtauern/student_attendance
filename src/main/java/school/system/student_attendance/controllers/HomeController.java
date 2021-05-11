@@ -253,4 +253,18 @@ public class HomeController {
         return REDIRECT+ADDCLASSTOCOURSE+"/"+newCourseClass.getCourseIdFk();
     }
 
+    @GetMapping("removeClassFromCourse/{courseId}/{classId}")
+    public String removeClassFromCourse(@PathVariable(value = "courseId") long courseId,
+                                        @PathVariable(value = "classId") long classId,
+                                        HttpSession session, Model model) {
+
+        log.info("removeClassFromCourse getmapping called with courseId="+courseId+" & classId="+classId);
+        Classes newClass = classService.getClassById((int)classId);
+        newClass.getCourses().remove(coursesService.getCourseById((int)courseId));
+        classService.saveClass(newClass);
+
+
+        return REDIRECT+ADDCLASSTOCOURSE+"/"+courseId;
+    }
+
 }

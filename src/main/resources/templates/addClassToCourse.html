@@ -37,7 +37,7 @@
         <td th:text="${class.classname}">Class Name</td>
         <td>
           <a th:href="@{/showClassUpdateForm/{id}(id=${class.id})}">Edit</a>
-          <a th:href="@{/removeClassFromCourse/{id}(id=${class.id})}">Remove From Course</a>
+          <a th:href="${'/removeClassFromCourse/'+{course.id}+'/'+{class.id}}">Remove From Course</a>
         </td>
       </tr>
       </tbody>
