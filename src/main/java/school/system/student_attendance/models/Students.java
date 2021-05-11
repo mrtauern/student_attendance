@@ -1,9 +1,9 @@
 package school.system.student_attendance.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Students {
@@ -62,6 +62,15 @@ public class Students {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @ManyToMany(mappedBy = "students")
+    private List<Courses> courses = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "students")
+    private List<Classes> classes = new ArrayList<>();
+
+    @OneToMany(mappedBy="student")
+    private Set<Attendance> attendances;
 
     @Override
     public boolean equals(Object o) {

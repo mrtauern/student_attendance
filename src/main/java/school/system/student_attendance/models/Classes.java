@@ -1,34 +1,53 @@
 package school.system.student_attendance.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.*;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Classes {
-    private int id;
-    private String classname;
 
     @Id
     @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;
 
     @Basic
     @Column(name = "classname")
-    public String getClassname() {
-        return classname;
-    }
+    private String classname;
 
-    public void setClassname(String classname) {
-        this.classname = classname;
-    }
+    @ManyToMany(cascade = {
+            CascadeType.ALL
+    })
+    @JoinTable(name = "courseclass",
+            joinColumns = @JoinColumn(name = "classid_fk"),
+            inverseJoinColumns = @JoinColumn(name = "courseid_fk")
+    )
+    private List<Courses> courses = new ArrayList<>();
+
+    @ManyToMany(cascade = {
+            CascadeType.ALL
+    })
+    @JoinTable(name = "teacherclass",
+            joinColumns = @JoinColumn(name = "classid_fk"),
+            inverseJoinColumns = @JoinColumn(name = "teacherid_fk")
+    )
+    private List<Teachers> teachers = new ArrayList<>();
+
+    @ManyToMany(cascade = {
+            CascadeType.ALL
+    })
+    @JoinTable(name = "studentclass",
+            joinColumns = @JoinColumn(name = "classid_fk"),
+            inverseJoinColumns = @JoinColumn(name = "studentid_fk")
+    )
+    private List<Students> students = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

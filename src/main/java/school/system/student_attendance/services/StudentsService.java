@@ -1,6 +1,7 @@
 package school.system.student_attendance.services;
 
 import org.springframework.stereotype.Service;
+import school.system.student_attendance.models.Classes;
 import school.system.student_attendance.models.Students;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface StudentsService {
     Students saveStudent(Students students);
     Students getStudentById(int id);
     void deleteStudentById(int id);
+    List<Students> getAllStudentsNotInClass(Classes classes);
 }
