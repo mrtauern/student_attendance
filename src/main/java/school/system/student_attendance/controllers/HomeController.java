@@ -286,9 +286,16 @@ public class HomeController {
     //--- COURSES ---
     @GetMapping("/courses")
     public String courses(HttpSession session, Model model) {
-        log.info("Courses getmapping called...");
-        model.addAttribute("listCourses", coursesService.getAllCourses());
-        return COURSES;
+        if(checkLogin(session) == false ) {
+            log.info("redirect to login if not logged in");
+            return REDIRECT+LOGIN;
+        }else {
+
+            log.info("Courses getmapping called...");
+            model.addAttribute("listCourses", coursesService.getAllCourses());
+
+            return COURSES;
+        }
     }
 
     @GetMapping("/addClassToCourse/{courseId}")
