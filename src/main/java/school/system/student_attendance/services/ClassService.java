@@ -13,7 +13,6 @@ public interface ClassService {
     Classes saveClass(Classes classes);
     Classes getClassById(int id);
     void deleteClassById(int id);
-
-
     List<Classes> getAllClassesNotInCourse(Courses course);
+
 }

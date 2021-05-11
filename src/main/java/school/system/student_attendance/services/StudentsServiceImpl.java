@@ -6,6 +6,7 @@ import school.system.student_attendance.models.Classes;
 import school.system.student_attendance.models.Students;
 import school.system.student_attendance.repositories.StudentsRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,4 +47,35 @@ public class StudentsServiceImpl implements StudentsService {
     public void deleteStudentById(int id) {
         this.studentsRepo.deleteById(id);
     }
+
+    @Override
+    public List<Students> getAllStudentsNotInClass(Classes classes) {
+        List<Students> allStudents = getAllStudents();
+        List<Students> studentNotInClass = new ArrayList<>();
+        List<Integer> usedIds = new ArrayList<>();
+        Boolean used = false;
+
+        for (Students s: classes.getStudents()) {
+            usedIds.add(s.getId());
+        }
+
+        for (Students s: allStudents) {
+            for (Integer id: usedIds) {
+                if(s.getId() == id) {
+                    used = true;
+                }
+            }
+
+            if(used != true) {
+                studentNotInClass.add(s);
+                usedIds.add(s.getId());
+            }
+            used = false;
+        }
+
+
+        return studentNotInClass;
+    }
+
+
 }

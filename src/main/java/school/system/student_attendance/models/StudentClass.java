@@ -2,9 +2,16 @@ package school.system.student_attendance.models;
 
 
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "studentClass", schema = "student_attendance", catalog = "")
 public class StudentClass implements Serializable {

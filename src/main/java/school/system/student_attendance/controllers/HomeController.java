@@ -1,6 +1,5 @@
 package school.system.student_attendance.controllers;
 
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,18 +15,17 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import java.util.logging.Logger;
 
 @Controller
 public class HomeController {
 
     HomeController(){
-
     }
 
     @Autowired
     StudentsService studentsService;
-
     @Autowired
     TeachersService teachersService;
 
@@ -43,6 +41,7 @@ public class HomeController {
     public CourseClassService courseClassService;
 */
 
+
     Logger log = Logger.getLogger(HomeController.class.getName());
 
     private final String REDIRECT = "redirect:/";
@@ -55,8 +54,10 @@ public class HomeController {
     private final String STUDENTS = "students";
     private final String CREATESTUDENTFORM = "createStudentForm";
     private final String UPDATESTUDENT = "updateStudents";
+    private final String ADDSTUDENTTOCLASS = "addStudentToClass";
     private final String COURSES = "courses";
     private final String ADDCLASSTOCOURSE = "addClassToCourse";
+
 
     @GetMapping("/")
     public String index(HttpSession session, Model model){
@@ -136,9 +137,6 @@ public class HomeController {
             return false;
         }
     }
-    //@GetMapping("/landing_page")
-    //public String landing_page
-
 
     @GetMapping("/classes")
     public String classes(HttpSession session, Model model){
@@ -366,5 +364,69 @@ public class HomeController {
 
         }
     }
+
+    //------------
+/*
+    @GetMapping("/studentClass")
+    public String studentClass(HttpSession session, Model model) {
+        log.info("--- Getmapping studentClass is called......");
+        Students s = studentsService.getAllStudents().getClass();
+        model.addAttribute("listStudentClass", studentsService.getAllStudents(),  classService.getAllClasses());
+        return STUDENTCLASS;
+    }
+    */
+
+
+    @GetMapping("/addStudentToClass/{classId}")
+    public String addStudentToClass(@PathVariable (value = "classId") long classId, HttpSession session, Model model) {
+        log.info("addClassToCourse getmapping called with id="+classId);
+
+        Classes classes = classService.getClassById((int)classId);
+        List<Students> studentInClass = classes.getStudents();
+
+        List<Students> studentsNotInClass = studentsService.getAllStudentsNotInClass(classes);
+
+        StudentClass newStudentClass = new StudentClass();
+
+        //model.addAttribute("listStudents", studentsService.getAllStudents());
+        model.addAttribute("classes", classes);
+        model.addAttribute("classId", ""+classId);
+        model.addAttribute("studentInClass", studentInClass);
+        model.addAttribute("studentsNotInClass", studentsNotInClass);
+        model.addAttribute("newStudentClass", newStudentClass);
+
+        return ADDSTUDENTTOCLASS;
+    }
+
+    @PostMapping("/addStudentToClass")
+    public String addStudentToClass(@ModelAttribute("studentClass") StudentClass newStudentClass, HttpSession session) {
+        log.info("saving courseClass courseId="+newStudentClass.getStudentIdFk()+" classId="+newStudentClass.getClassIdFk());
+
+        Classes newClass = classService.getClassById(newStudentClass.getClassIdFk());
+        Students test = studentsService.getStudentById(newStudentClass.getStudentIdFk());
+
+        newClass.getStudents().add(test);
+
+        classService.saveClass(newClass);
+
+        return REDIRECT+ADDSTUDENTTOCLASS+"/"+newStudentClass.getClassIdFk();
+    }
+
+
+
+    @GetMapping("removeStudentFromClass/{studentId}/{classId}")
+    public String removeStudentFromClass(@PathVariable(value = "studentId") long studentId,
+                                        @PathVariable(value = "classId") long classId,
+                                        HttpSession session, Model model) {
+
+        log.info("removeClassFromCourse getmapping called with courseId="+studentId+" & classId="+classId);
+        Classes newClass = classService.getClassById((int)classId);
+        newClass.getStudents().remove(studentsService.getStudentById((int)studentId));
+        classService.saveClass(newClass);
+
+
+        return REDIRECT+ADDSTUDENTTOCLASS+"/"+classId;
+    }
+
 
 }
