@@ -17,7 +17,7 @@
 
   <div id="inner_container">
 
-    <h1>Course <span th:text="${course.getName()}"></span></h1>
+    <h1>Course <span th:text="${course.name}"></span></h1>
     <h2>Current classes</h2>
     <!-- <a href="/new">Create New Class</a> -->
     <a th:href="@{/createClassForm}" >Create New Class</a>
@@ -42,8 +42,10 @@
       </tr>
       </tbody>
     </table>
-    <form type="POST" th:action="@{/addClassToCourse/{id}(id=${course.id})}">
-      <select id="Class" name="Class">
+    <form method="POST" th:action="@{/addClassToCourse}" th:object ="${newCourseClass}">
+
+      <input type="hidden" th:field="*{courseIdFk}" th:value="${course.id}">
+      <select id="Class" name="Class" th:field="*{classIdFk}">
         <span th:each="class : ${allClasses}">
           <option th:value="${class.id}" th:text="${class.classname}"></option>
         </span>

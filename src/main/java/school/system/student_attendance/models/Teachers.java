@@ -1,67 +1,46 @@
 package school.system.student_attendance.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class Teachers {
-    private int id;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String password;
+public class Teachers implements Serializable {
 
     @Id
     @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;
 
     @Basic
     @Column(name = "firstname")
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
+    private String firstname;
 
     @Basic
     @Column(name = "lastname")
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+    private String lastname;
 
     @Basic
     @Column(name = "email")
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    private String email;
 
     @Basic
     @Column(name = "password")
-    public String getPassword() {
-        return password;
-    }
+    private String password;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    @ManyToMany(mappedBy = "teachers")
+    private List<Courses> courses = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "teachers")
+    private List<Classes> classes = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

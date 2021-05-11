@@ -1,34 +1,52 @@
 package school.system.student_attendance.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Courses {
-    private int id;
-    private String name;
 
     @Id
     @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;
 
     @Basic
     @Column(name = "name")
-    public String getName() {
-        return name;
-    }
+    private String name;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @OneToMany(mappedBy="course")
+    private Set<Sessions> sessions;
+
+    @ManyToMany(cascade = {
+            CascadeType.ALL
+    })
+    @JoinTable(name = "teachercourse",
+            joinColumns = @JoinColumn(name = "courseid_fk"),
+            inverseJoinColumns = @JoinColumn(name = "teacherid_fk")
+    )
+    private List<Teachers> teachers = new ArrayList<>();
+
+    @ManyToMany(cascade = {
+            CascadeType.ALL
+    })
+    @JoinTable(name = "studentcourse",
+            joinColumns = @JoinColumn(name = "courseid_fk"),
+            inverseJoinColumns = @JoinColumn(name = "studentid_fk")
+    )
+    private List<Students> students = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "courses")
+    private List<Classes> classes = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

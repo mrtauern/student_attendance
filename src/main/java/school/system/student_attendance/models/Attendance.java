@@ -1,81 +1,43 @@
 package school.system.student_attendance.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.*;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Attendance {
-    private int id;
-    private byte status;
-    private Timestamp time;
-    private Byte networkVerified;
-    private int sessionIdFk;
-    private int studentIdFk;
 
     @Id
     @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int id;
 
     @Basic
     @Column(name = "status")
-    public byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(byte status) {
-        this.status = status;
-    }
+    private byte status;
 
     @Basic
     @Column(name = "time")
-    public Timestamp getTime() {
-        return time;
-    }
-
-    public void setTime(Timestamp time) {
-        this.time = time;
-    }
+    private Timestamp time;
 
     @Basic
-    @Column(name = "networkVerified")
-    public Byte getNetworkVerified() {
-        return networkVerified;
-    }
+    @Column(name = "networkverified")
+    private Byte networkVerified;
 
-    public void setNetworkVerified(Byte networkVerified) {
-        this.networkVerified = networkVerified;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sessionid_fk")
+    private Sessions session;
 
-    @Basic
-    @Column(name = "sessionId_fk")
-    public int getSessionIdFk() {
-        return sessionIdFk;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "studentid_fk")
+    private Students student;
 
-    public void setSessionIdFk(int sessionIdFk) {
-        this.sessionIdFk = sessionIdFk;
-    }
-
-    @Basic
-    @Column(name = "studentId_fk")
-    public int getStudentIdFk() {
-        return studentIdFk;
-    }
-
-    public void setStudentIdFk(int studentIdFk) {
-        this.studentIdFk = studentIdFk;
-    }
-
-    @Override
+    /*@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -102,5 +64,5 @@ public class Attendance {
         result = 31 * result + sessionIdFk;
         result = 31 * result + studentIdFk;
         return result;
-    }
+    }*/
 }

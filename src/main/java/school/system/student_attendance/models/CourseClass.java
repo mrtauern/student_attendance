@@ -4,13 +4,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "courseclass", schema = "student_attendance", catalog = "")
+@Table(name = "courseClass", schema = "student_attendance", catalog = "")
 public class CourseClass implements Serializable {
     private int courseIdFk;
     private int classIdFk;
 
     @Id
-    @Column(name = "courseid_fk")
+    @Column(name = "courseId_fk")
     public int getCourseIdFk() {
         return courseIdFk;
     }
@@ -19,8 +19,8 @@ public class CourseClass implements Serializable {
         this.courseIdFk = courseIdFk;
     }
 
-    //@Id
-    @Column(name = "classid_fk")
+    @Id
+    @Column(name = "classId_fk")
     public int getClassIdFk() {
         return classIdFk;
     }
