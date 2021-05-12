@@ -9,10 +9,15 @@
 
   <div id="inner_container">
 
-    <H1>Session info</H1>
+    <div id="navigation">
+      <div id="breadcrumb"><a href="/dashboard">Dashboard</a> / <a href="/sessions_list">Session list</a> / session info</div>
+      <a href="/sessions_list" id="back"><i class="fas fa-angle-left"></i> Session list</a>
+    </div>
 
-    <!--<h2>students</h2>
-    <table class="table table-striped">
+    <H1 th:text="${'Session info - ' + thisSession.course.name + ' - ' + #dates.format(thisSession.date, 'HH:mm dd/MM/yyyy')}"></H1>
+
+    <h2>Students</h2>
+    <!--<table class="table table-striped">
       <thead class="thead-dark">
       <tr>
         <th>First name</th>
@@ -40,6 +45,8 @@
           <th>Last name</th>
           <th>Email</th>
           <th>Attendance</th>
+          <th>Verified</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -51,6 +58,56 @@
             <span th:case="1" class="attended"><i class="fas fa-check"></i> Attended</span>
             <span th:case="0" class="notAttended"><i class="fas fa-times"></i> Not attended</span>
           </td>
+          <td th:switch="${l.networkVerified}">
+            <span th:case="1" class="attended"><i class="fas fa-check"></i> Verified</span>
+            <span th:case="0" class="notAttended"><i class="fas fa-times"></i> Not verified</span>
+          </td>
+          <td th:switch="${l.attendance}">
+            <a th:case="0" th:href="${'/attend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-check"></i></a>
+            <a th:case="1" th:href="${'/unattend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-times"></i></a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </span>
+
+    <h2>Teachers</h2>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+      <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="teacher : ${thisSession.course.teachers}">
+        <td th:text="${teacher.firstname}"></td>
+        <td th:text="${teacher.lastname}"></td>
+        <td th:text="${teacher.email}"></td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <span th:each="class : ${thisSession.course.classes}">
+      <h3 th:text="${class.classname}"></h3>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Email</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacher : ${class.teachers}">
+          <td th:text="${teacher.firstname}"></td>
+          <td th:text="${teacher.lastname}"></td>
+          <td th:text="${teacher.email}"></td>
+          <td></td>
         </tr>
         </tbody>
       </table>

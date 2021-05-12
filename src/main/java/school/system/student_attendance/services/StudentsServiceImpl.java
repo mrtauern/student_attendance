@@ -15,4 +15,24 @@ public class StudentsServiceImpl implements StudentsService {
     public Iterable<Students> findAll() {
         return studentsRepo.findAll();
     }
+
+    @Override
+    public Students findById(int id) {
+        return studentsRepo.findById(id).get();
+    }
+
+    @Override
+    public Students save(Students student) {
+        return save(student);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        studentsRepo.deleteById(id);
+    }
+
+    @Override
+    public void delete(Students student) {
+        studentsRepo.delete(student);
+    }
 }

@@ -9,9 +9,14 @@
 
   <div id="inner_container">
 
-    <H1>Reveal code</H1>
+    <div id="navigation">
+      <div id="breadcrumb"><a href="/dashboard">Dashboard</a> / <a href="/sessions_list">Session list</a> / reveal code</div>
+      <a href="/sessions_list" id="back"><i class="fas fa-angle-left"></i> Session list</a>
+    </div>
 
-    <h2 th:text="${sessionCode}"></h2>
+    <H1 th:text="${'Reveal code - ' + thisSession.course.name + ' - ' + #dates.format(thisSession.date, 'HH:mm dd/MM/yyyy')}"></H1>
+
+    <h2 id="sessionCode" th:text="${thisSession.sessionCode}"></h2>
 
   </div>
 

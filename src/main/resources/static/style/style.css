@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i');
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
 * {
     font-family: 'Roboto Condensed', 'Roboto', sans-serif;
@@ -366,11 +367,13 @@ span#countNotification{
 
 span#logo{
     font-weight: bold;
+    font-family: Lobster;
     padding-left: 20px;
 }
 
 span#logo span.red{
     color: #E74C3C;
+    font-family: Lobster;
 }
 
 .attended{
@@ -389,4 +392,29 @@ footer {
     height: 60px;
     width: 100%;
     float: left;
+}
+
+div#navigation{
+    margin-top: 20px;
+}
+
+div#navigation a#back{
+    font-size: 20px;
+    color: #E74C3C;
+    font-weight: bold;
+}
+
+div#navigation div#breadcrumb{
+    font-size: 12px;
+    color: #AAAAAA;
+}
+
+div#navigation div#breadcrumb a{
+    font-size: 12px;
+    color: #AAAAAA;
+}
+
+h2#sessionCode{
+    text-align: center;
+    font-size: 120px;
 }

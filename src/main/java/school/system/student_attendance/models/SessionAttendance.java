@@ -13,5 +13,6 @@ public class SessionAttendance {
     private String lastname;
     private String email;
     private int attendance;
+    private int networkVerified;
 
 }

@@ -38,6 +38,7 @@ public class HomeController {
     private final String REDIRECT = "redirect:/";
     private final String INDEX = "index";
     private final String LANDING_PAGE = "landing_page";
+    private final String DASHBOARD = "dashboard";
     private final String LOGIN = "login";
 
     @GetMapping("/")
@@ -91,16 +92,16 @@ public class HomeController {
         }
 
         model.addAttribute("Students", "Success!");
-        return LANDING_PAGE;
+        return REDIRECT+DASHBOARD;
     }
 
-    @GetMapping("/landing_page")
-    public String landing_page(HttpSession session) {
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session) {
         log.info("Called getmapping landing_page");
         if(checkLogin(session) == false) {
             return REDIRECT+LOGIN;
         }else {
-            return LANDING_PAGE;
+            return DASHBOARD;
         }
     }
 
@@ -120,4 +121,13 @@ public class HomeController {
     }
     //@GetMapping("/landing_page")
     //public String landing_page
+
+    @GetMapping("/log_out")
+    public String logout(HttpSession session){
+        log.info("Log out called...");
+
+        session.removeAttribute("login");
+
+        return "redirect:/";
+    }
 }

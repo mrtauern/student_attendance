@@ -9,6 +9,11 @@
 
   <div id="inner_container">
 
+    <div id="navigation">
+      <div id="breadcrumb"><a href="/dashboard">Dashboard</a> / session list</div>
+      <a href="/dashboard" id="back"><i class="fas fa-angle-left"></i> Dashboard</a>
+    </div>
+
     <H1>Sessions list</H1>
 
     <table class="table table-striped">
@@ -17,6 +22,7 @@
         <th>Date</th>
         <th>Course</th>
         <th>Teachers</th>
+        <th></th>
         <th></th>
       </tr>
       </thead>
@@ -28,9 +34,13 @@
           <span th:each="t : ${s.course.teachers}" th:text="${t.firstname + ' ' + t.lastname + ', '}"></span>
         </td>
         <td>
-          <a th:href="${'/reveal_code/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-eye"></i> Reveal code</a>
+          <span th:switch="${sessionType}">
+            <a th:case="t" th:href="${'/reveal_code/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-eye"></i> Reveal code</a>
+            <a th:case="s" th:href="${'/attend_session/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-user-check"></i> Attend</a>
+          </span>
           <a th:href="${'/session_info/' + s.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-ellipsis-h"></i> More</a>
         </td>
+        <td th:text="${#dates.minute(s.date) + 45}"></td>
       </tr>
       </tbody>
     </table>
