@@ -62,6 +62,7 @@ public class HomeController {
     private final String COURSES = "courses";
     private final String ADDCLASSTOCOURSE = "addClassToCourse";
     private final String IPRANGES = "ipRanges";
+    private final String NOTALLOWED = "notAllowed";
 
 
     @GetMapping("/")
@@ -80,7 +81,12 @@ public class HomeController {
         boolean isAllowed = iprangesService.isIpAllowed(ipAddress);
         log.info("allowed? "+isAllowed);
 
-        return LOGIN;
+        if(isAllowed) {
+            return LOGIN;
+        }
+        else {
+            return NOTALLOWED;
+        }
     }
 
     @PostMapping("/login")
