@@ -61,6 +61,7 @@ public class HomeController {
     private final String ADDSTUDENTTOCLASS = "addStudentToClass";
     private final String COURSES = "courses";
     private final String ADDCLASSTOCOURSE = "addClassToCourse";
+    private final String IPRANGES = "ipRanges";
 
 
     @GetMapping("/")
@@ -73,10 +74,11 @@ public class HomeController {
     public String login(HttpSession session, Model model, HttpServletRequest request) {
         log.info("login called (get)");
         log.info("ipAddress = "+httpRequestService.getClientIp(request));
-        String testip = httpRequestService.getClientIp(request);
-        //log.info(iprangesService.isIpAllowed(testip));
-        boolean test = iprangesService.isIpAllowed(testip);
-        log.info("allowed?"+test);
+
+        String ipAddress = httpRequestService.getClientIp(request);
+
+        boolean isAllowed = iprangesService.isIpAllowed(ipAddress);
+        log.info("allowed? "+isAllowed);
 
         return LOGIN;
     }
@@ -435,6 +437,20 @@ public class HomeController {
 
 
         return REDIRECT+ADDSTUDENTTOCLASS+"/"+classId;
+    }
+
+    //---------------IPRANGES-----------------
+
+    @GetMapping("/ipRanges")
+    public String ipRanges(HttpSession session, Model model) {
+        if(checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
+            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute="+session.getAttribute("login"));
+            return REDIRECT+LOGIN;
+        }else {
+
+            model.addAttribute("listIpRanges", iprangesService.getAllIpranges());
+            return IPRANGES;
+        }
     }
 
 
