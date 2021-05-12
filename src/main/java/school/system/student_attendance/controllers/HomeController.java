@@ -3,6 +3,7 @@ package school.system.student_attendance.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 import school.system.student_attendance.models.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import school.system.student_attendance.services.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +28,18 @@ public class HomeController {
 
     @Autowired
     StudentsService studentsService;
+
     @Autowired
     TeachersService teachersService;
 
     @Autowired
-    private ClassService classService;
+    ClassService classService;
 
     @Autowired
-    private CoursesService coursesService;
+    CoursesService coursesService;
 
-    /*
-    @Qualifier(value = "CourseClassService")
     @Autowired
-    public CourseClassService courseClassService;
-*/
+    HttpRequestService httpRequestService;
 
 
     Logger log = Logger.getLogger(HomeController.class.getName());
@@ -66,8 +66,9 @@ public class HomeController {
     }
 
     @GetMapping("/login")
-    public String login(HttpSession session, Model model) {
+    public String login(HttpSession session, Model model, HttpServletRequest request) {
         log.info("login called (get)");
+        log.info("ipAddress = "+httpRequestService.getClientIp(request));
 
         return LOGIN;
     }
