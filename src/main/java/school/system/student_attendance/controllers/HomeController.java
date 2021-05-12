@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import school.system.student_attendance.services.*;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public class HomeController {
     @Autowired
     HttpRequestService httpRequestService;
 
+    @Autowired
+    IprangesService iprangesService;
+
 
     Logger log = Logger.getLogger(HomeController.class.getName());
 
@@ -69,6 +73,10 @@ public class HomeController {
     public String login(HttpSession session, Model model, HttpServletRequest request) {
         log.info("login called (get)");
         log.info("ipAddress = "+httpRequestService.getClientIp(request));
+        String testip = httpRequestService.getClientIp(request);
+        //log.info(iprangesService.isIpAllowed(testip));
+        boolean test = iprangesService.isIpAllowed(testip);
+        log.info("allowed?"+test);
 
         return LOGIN;
     }
