@@ -38,9 +38,8 @@
                 <td th:text="${ipRange.ipToPart1+'.'+ipRange.ipToPart2+'.'+ipRange.ipToPart3+'.'+ipRange.ipToPart4}">IP range from</td>
 
                 <td>
-                    <!--<a th:href="@{/showClassUpdateForm/{id}(id=${class.id})}">Edit</a>
-                    <a th:href="@{/deleteClass/{id}(id=${class.id})}">Delete</a>
-                    <a th:href="@{/addStudentToClass/{id}(id=${class.id})}">Students</a>-->
+                    <a th:href="@{/editIpRangeForm/{id}(id=${ipRange.id})}">Edit</a>
+                    <a th:href="@{/deleteIpRange/{id}(id=${ipRange.id})}">Delete</a>
                     <!--  <a th:href="/@{'/edit/' + ${product.id}}">Edit</a> -->
                     &nbsp;&nbsp;&nbsp;
                     <!-- <a th:href="/@{'/delete/' + ${product.id}}">Delete</a> -->
