@@ -58,18 +58,30 @@ public class IprangesServiceImpl implements IprangesService{
                 switch (i) {
                     case 0:
                         allowed = isInRange(ip.getIpFromPart1(), ip.getIpToPart1(), ipArr[i]);
+                        if(!allowed) {
+                            return false;
+                        }
                     break;
 
                     case 1:
                         allowed = isInRange(ip.getIpFromPart2(), ip.getIpToPart2(), ipArr[i]);
+                        if(!allowed) {
+                            return false;
+                        }
                     break;
 
                     case 2:
                         allowed = isInRange(ip.getIpFromPart3(), ip.getIpToPart3(), ipArr[i]);
+                        if(!allowed) {
+                            return false;
+                        }
                     break;
 
                     case 3:
                         allowed = isInRange(ip.getIpFromPart4(), ip.getIpToPart4(), ipArr[i]);
+                        if(!allowed) {
+                            return false;
+                        }
                     break;
 
                     default:
