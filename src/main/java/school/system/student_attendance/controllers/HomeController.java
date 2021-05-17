@@ -456,11 +456,28 @@ public class HomeController {
             log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
             return REDIRECT + LOGIN;
         } else {
-
+            Ipranges iprange = new Ipranges();
+            model.addAttribute("newIpRange", iprange);
             model.addAttribute("listIpRanges", iprangesService.getAllIpranges());
             return IPRANGES;
         }
     }
+/*
+    @GetMapping("/createClassForm")
+    public String createClassForm(HttpSession session, Model model) {
+        //char test = 't';
+        if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
+            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
+            return REDIRECT + LOGIN;
+        } else {
+            Classes classes = new Classes();
+            model.addAttribute("classes", classes);
+            log.info("  createClassForm is called ");
+            return CREATECLASSFORM;
+        }
+
+
+    }*/
 
     @GetMapping("/editIpRangeForm/{id}")
     public String editIpRangeForm(@PathVariable(value = "id") long id, HttpSession session, Model model) {

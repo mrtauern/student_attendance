@@ -18,7 +18,25 @@
     <div id="inner_container">
 
         <h1>IP Range List</h1>
-        <!-- <a href="/new">Create New Class</a> -->
+        <form th:action="@{/saveIpRange}" th:object ="${newIpRange}" method="POST">
+            <style>
+                input {
+                    width: 50px;
+                }
+            </style>
+            <label>IP Range From:</label><br>
+            <input type="number" th:field = "*{ipFromPart1}" class="smallNumber">.
+            <input type="number" th:field = "*{ipFromPart2}" class="smallNumber">.
+            <input type="number" th:field = "*{ipFromPart3}" class="smallNumber">.
+            <input type="number" th:field = "*{ipFromPart4}" class="smallNumber"><br><br>
+            <label>IP Range To</label><br>
+            <input type="number" th:field = "*{ipToPart1}" class="smallNumber">.
+            <input type="number" th:field = "*{ipToPart2}" class="smallNumber">.
+            <input type="number" th:field = "*{ipToPart3}" class="smallNumber">.
+            <input type="number" th:field = "*{ipToPart4}" class="smallNumber"><br><br>
+            <button type="submit" class="form-control mb-4 col-4" >Create IP Range</button>
+        </form>
+        </form>
         <!--<a th:href="@{/createClassForm}" >Create New Class</a>-->
         <br/><br/>
         <table border="1" cellpadding="10">
