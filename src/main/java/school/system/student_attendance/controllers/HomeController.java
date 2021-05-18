@@ -81,7 +81,7 @@ public class HomeController {
 
         boolean isAllowed = iprangesService.isIpAllowed(ipAddress);
         log.info("allowed? " + isAllowed);
-
+        model.addAttribute("sessionLogin", session.getAttribute("login"));
         if (isAllowed) {
             return LOGIN;
         } else {
@@ -129,8 +129,9 @@ public class HomeController {
     }
 
     @GetMapping("/landing_page")
-    public String landing_page(HttpSession session) {
-        log.info("Called getmapping landing_page");
+    public String landing_page(HttpSession session, Model model) {
+        log.info("Called getmapping landing_page sessionLogin=" + session.getAttribute("login"));
+        model.addAttribute("sessionLogin", session.getAttribute("login"));
         if (checkLogin(session) == false) {
             return REDIRECT + LOGIN;
         } else {
@@ -143,7 +144,7 @@ public class HomeController {
         session.setAttribute("id", id);
         session.setAttribute("login", type);
         session.setAttribute("user", user);
-        log.info("login success");
+        log.info("login success sessionLogin=" + session.getAttribute("login"));
     }
 
     private boolean checkLogin(HttpSession session) {
@@ -155,12 +156,24 @@ public class HomeController {
         }
     }
 
+    @GetMapping("log_out")
+    public String logout(HttpSession session) {
+        log.info("log out called...");
+
+        session.removeAttribute("login");
+        session.removeAttribute("id");
+        session.removeAttribute("user");
+
+        return REDIRECT+LOGIN;
+    }
+
     @GetMapping("/classes")
     public String classes(HttpSession session, Model model) {
         if (checkLogin(session) == false) {
             return REDIRECT + LOGIN;
         } else {
             model.addAttribute("listClasses", classService.getAllClasses());
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
             log.info("  get mapping Classes is called");
             return CLASSES;
         }
@@ -175,6 +188,7 @@ public class HomeController {
         } else {
             Classes classes = new Classes();
             model.addAttribute("classes", classes);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
             log.info("  createClassForm is called ");
             return CREATECLASSFORM;
         }
@@ -183,7 +197,7 @@ public class HomeController {
     }
 
     @PostMapping("/saveClass")
-    public String saveClass(@ModelAttribute("class") Classes classes, HttpSession session) {
+    public String saveClass(@ModelAttribute("class") Classes classes, HttpSession session, Model model) {
         if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
             log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
             return REDIRECT + LOGIN;
@@ -191,6 +205,8 @@ public class HomeController {
 
             classService.saveClass(classes);
             log.info("  PostMapping saveClass is called ");
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
 
             return REDIRECT + CLASSES;
 
@@ -206,6 +222,8 @@ public class HomeController {
 
             Classes classes = classService.getClassById(id);
             model.addAttribute("classes", classes);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
             log.info("  GetMapping showClassUpdateForm is called ");
 
             return UPDATECLASSES;
@@ -214,13 +232,15 @@ public class HomeController {
     }
 
     @GetMapping("/deleteClass/{id}")
-    public String deleteClass(@PathVariable(value = "id") int id, HttpSession session) {
+    public String deleteClass(@PathVariable(value = "id") int id, HttpSession session, Model model) {
         if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
             log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
             return REDIRECT + LOGIN;
         } else {
             this.classService.deleteClassById(id);
             log.info("  GetMapping deleteClass is called ");
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
             return REDIRECT + CLASSES;
         }
     }
@@ -234,6 +254,8 @@ public class HomeController {
         } else {
 
             model.addAttribute("listStudents", studentsService.getAllStudents());
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
             log.info("  get mapping Students is called");
 
             return STUDENTS;
@@ -250,6 +272,8 @@ public class HomeController {
             Students students = new Students();
 
             model.addAttribute("students", students);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
             log.info("  createStudentForm is called ");
 
             return CREATESTUDENTFORM;
@@ -257,13 +281,15 @@ public class HomeController {
     }
 
     @PostMapping("/saveStudent")
-    public String saveSTUDENT(@ModelAttribute("student") Students students, HttpSession session) {
+    public String saveSTUDENT(@ModelAttribute("student") Students students, HttpSession session, Model model) {
         if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
             log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
             return REDIRECT + LOGIN;
         } else {
 
             studentsService.saveStudent(students);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
             log.info("  PostMapping saveClass is called ");
 
             return REDIRECT + STUDENTS;
@@ -280,6 +306,8 @@ public class HomeController {
 
             Students students = studentsService.getStudentById(id);
             model.addAttribute("students", students);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
             log.info("  GetMapping showStudentUpdateForm is called ");
 
             return UPDATESTUDENT;
@@ -288,7 +316,7 @@ public class HomeController {
     }
 
     @GetMapping("/deleteStudent/{id}")
-    public String deleteStudent(@PathVariable(value = "id") int id, HttpSession session) {
+    public String deleteStudent(@PathVariable(value = "id") int id, HttpSession session, Model model) {
         if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
             log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
             return REDIRECT + LOGIN;
@@ -296,6 +324,8 @@ public class HomeController {
 
             this.studentsService.deleteStudentById(id);
             log.info("  GetMapping deleteClass is called ");
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
 
             return REDIRECT + STUDENTS;
 
@@ -312,6 +342,8 @@ public class HomeController {
 
             log.info("Courses getmapping called...");
             model.addAttribute("listCourses", coursesService.getAllCourses());
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
 
             return COURSES;
         }
@@ -338,6 +370,8 @@ public class HomeController {
             model.addAttribute("classes", classesInCourse);
             model.addAttribute("allClasses", classesNotInCourse);
             model.addAttribute("newCourseClass", newCourseClass);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
 
             return ADDCLASSTOCOURSE;
 
@@ -345,7 +379,7 @@ public class HomeController {
     }
 
     @PostMapping("/addClassToCourse")
-    public String saveClassToCourse(@ModelAttribute("courseClass") CourseClass newCourseClass, HttpSession session) {
+    public String saveClassToCourse(@ModelAttribute("courseClass") CourseClass newCourseClass, HttpSession session, Model model) {
         if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
             log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
             return REDIRECT + LOGIN;
@@ -359,6 +393,8 @@ public class HomeController {
             newClass.getCourses().add(test);
 
             classService.saveClass(newClass);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
 
             return REDIRECT + ADDCLASSTOCOURSE + "/" + newCourseClass.getCourseIdFk();
 
@@ -379,6 +415,7 @@ public class HomeController {
             Classes newClass = classService.getClassById((int) classId);
             newClass.getCourses().remove(coursesService.getCourseById((int) courseId));
             classService.saveClass(newClass);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
 
 
             return REDIRECT + ADDCLASSTOCOURSE + "/" + courseId;
@@ -387,50 +424,50 @@ public class HomeController {
     }
 
     //------------
-/*
-    @GetMapping("/studentClass")
-    public String studentClass(HttpSession session, Model model) {
-        log.info("--- Getmapping studentClass is called......");
-        Students s = studentsService.getAllStudents().getClass();
-        model.addAttribute("listStudentClass", studentsService.getAllStudents(),  classService.getAllClasses());
-        return STUDENTCLASS;
-    }
-    */
-
 
     @GetMapping("/addStudentToClass/{classId}")
     public String addStudentToClass(@PathVariable(value = "classId") long classId, HttpSession session, Model model) {
         log.info("addClassToCourse getmapping called with id=" + classId);
+        if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
+            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
+            return REDIRECT + LOGIN;
+        } else {
+            Classes classes = classService.getClassById((int) classId);
+            List<Students> studentInClass = classes.getStudents();
 
-        Classes classes = classService.getClassById((int) classId);
-        List<Students> studentInClass = classes.getStudents();
+            List<Students> studentsNotInClass = studentsService.getAllStudentsNotInClass(classes);
 
-        List<Students> studentsNotInClass = studentsService.getAllStudentsNotInClass(classes);
+            StudentClass newStudentClass = new StudentClass();
 
-        StudentClass newStudentClass = new StudentClass();
+            //model.addAttribute("listStudents", studentsService.getAllStudents());
+            model.addAttribute("classes", classes);
+            model.addAttribute("classId", "" + classId);
+            model.addAttribute("studentInClass", studentInClass);
+            model.addAttribute("studentsNotInClass", studentsNotInClass);
+            model.addAttribute("newStudentClass", newStudentClass);
+            model.addAttribute("sessionLogin", session.getAttribute("login"));
 
-        //model.addAttribute("listStudents", studentsService.getAllStudents());
-        model.addAttribute("classes", classes);
-        model.addAttribute("classId", "" + classId);
-        model.addAttribute("studentInClass", studentInClass);
-        model.addAttribute("studentsNotInClass", studentsNotInClass);
-        model.addAttribute("newStudentClass", newStudentClass);
 
-        return ADDSTUDENTTOCLASS;
+            return ADDSTUDENTTOCLASS;
+        }
     }
 
     @PostMapping("/addStudentToClass")
     public String addStudentToClass(@ModelAttribute("studentClass") StudentClass newStudentClass, HttpSession session) {
         log.info("saving courseClass courseId=" + newStudentClass.getStudentIdFk() + " classId=" + newStudentClass.getClassIdFk());
+        if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
+            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
+            return REDIRECT + LOGIN;
+        } else {
+            Classes newClass = classService.getClassById(newStudentClass.getClassIdFk());
+            Students test = studentsService.getStudentById(newStudentClass.getStudentIdFk());
 
-        Classes newClass = classService.getClassById(newStudentClass.getClassIdFk());
-        Students test = studentsService.getStudentById(newStudentClass.getStudentIdFk());
+            newClass.getStudents().add(test);
 
-        newClass.getStudents().add(test);
+            classService.saveClass(newClass);
 
-        classService.saveClass(newClass);
-
-        return REDIRECT + ADDSTUDENTTOCLASS + "/" + newStudentClass.getClassIdFk();
+            return REDIRECT + ADDSTUDENTTOCLASS + "/" + newStudentClass.getClassIdFk();
+        }
     }
 
 
@@ -438,14 +475,18 @@ public class HomeController {
     public String removeStudentFromClass(@PathVariable(value = "studentId") long studentId,
                                          @PathVariable(value = "classId") long classId,
                                          HttpSession session, Model model) {
+        if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
+            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
+            return REDIRECT + LOGIN;
+        } else {
+            log.info("removeClassFromCourse getmapping called with courseId=" + studentId + " & classId=" + classId);
+            Classes newClass = classService.getClassById((int) classId);
+            newClass.getStudents().remove(studentsService.getStudentById((int) studentId));
+            classService.saveClass(newClass);
+            model.addAttribute("sessionLogin", session.getAttribute("login"));
 
-        log.info("removeClassFromCourse getmapping called with courseId=" + studentId + " & classId=" + classId);
-        Classes newClass = classService.getClassById((int) classId);
-        newClass.getStudents().remove(studentsService.getStudentById((int) studentId));
-        classService.saveClass(newClass);
-
-
-        return REDIRECT + ADDSTUDENTTOCLASS + "/" + classId;
+            return REDIRECT + ADDSTUDENTTOCLASS + "/" + classId;
+        }
     }
 
     //---------------IPRANGES-----------------
@@ -459,25 +500,10 @@ public class HomeController {
             Ipranges iprange = new Ipranges();
             model.addAttribute("newIpRange", iprange);
             model.addAttribute("listIpRanges", iprangesService.getAllIpranges());
+            model.addAttribute("sessionLogin", session.getAttribute("login"));
             return IPRANGES;
         }
     }
-/*
-    @GetMapping("/createClassForm")
-    public String createClassForm(HttpSession session, Model model) {
-        //char test = 't';
-        if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
-            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
-            return REDIRECT + LOGIN;
-        } else {
-            Classes classes = new Classes();
-            model.addAttribute("classes", classes);
-            log.info("  createClassForm is called ");
-            return CREATECLASSFORM;
-        }
-
-
-    }*/
 
     @GetMapping("/editIpRangeForm/{id}")
     public String editIpRangeForm(@PathVariable(value = "id") long id, HttpSession session, Model model) {
@@ -489,32 +515,36 @@ public class HomeController {
             Ipranges ipRange = iprangesService.getIprangeById((int) id);
 
             model.addAttribute("ipRange", ipRange);
+            model.addAttribute("sessionLogin", session.getAttribute("login"));
             return EDITIPRANGE;
         }
     }
 
     @PostMapping("/saveIpRange")
-    public String saveIpRange(@ModelAttribute("ipRange") Ipranges ipRange, HttpSession session) {
+    public String saveIpRange(@ModelAttribute("ipRange") Ipranges ipRange, HttpSession session, Model model) {
         if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
             log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
             return REDIRECT + LOGIN;
         } else {
 
             log.info("saveIpRange PostMapping called...");
+            model.addAttribute("sessionLogin", session.getAttribute("login"));
             iprangesService.save(ipRange);
             return REDIRECT + IPRANGES;
         }
     }
 
     @GetMapping("/deleteIpRange/{id}")
-    public String deleteIpRange(@PathVariable(value= "id") long id, HttpSession session) {
+    public String deleteIpRange(@PathVariable(value= "id") long id, HttpSession session, Model model) {
         if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
             log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
             return REDIRECT + LOGIN;
         } else {
 
             iprangesService.deleteIprangeById((int) id);
+            model.addAttribute("sessionLogin", session.getAttribute("login"));
             return REDIRECT + IPRANGES;
         }
     }
+
 }
