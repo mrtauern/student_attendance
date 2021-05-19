@@ -125,7 +125,7 @@ public class HomeController {
         }
 
         model.addAttribute("Students", "Success!");
-        return LANDING_PAGE;
+        return REDIRECT+CLASSES;
     }
 
     @GetMapping("/landing_page")
