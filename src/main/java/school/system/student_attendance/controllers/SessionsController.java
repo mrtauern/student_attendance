@@ -5,6 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import school.system.student_attendance.models.*;
 import school.system.student_attendance.services.*;
 
@@ -13,6 +16,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -56,15 +60,26 @@ public class SessionsController {
     private final String ATTEND_SESSION = "attend_session";
 
     @GetMapping("/sessions_list")
-    public String getProductList(Model model, HttpSession httpSession){
+    public String getProductList(Model model, HttpSession httpSession, RedirectAttributes redAt){
         log.info("Sessions list called");
 
         if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
             return REDIRECT+LOGIN;
         }
 
         List<Sessions> sessions = sessionsService.findAll();
         List<Attendance> attendances = attendanceService.findAll();
+
+        //Set test date
+        Timestamp ts = Timestamp.from(Instant.now());
+        Calendar calendar3 = Calendar.getInstance();
+        calendar3.setTime(ts);
+        calendar3.add(Calendar.MINUTE, -10);
+        Timestamp ts2 = Timestamp.from(calendar3.toInstant());
+        sessions.get(1).setDate(ts2);
 
         String sessionId = httpSession.getAttribute("login").toString();
         char sessionType = sessionId.charAt(0);
@@ -122,6 +137,7 @@ public class SessionsController {
 
         model.addAttribute("sessionType", sessionType);
         model.addAttribute("sessions", sessions);
+        model.addAttribute("sessionList", sessionList);
         model.addAttribute("pageTitle", "sessions list");
 
         return SESSIONS_LIST;
@@ -198,8 +214,16 @@ public class SessionsController {
     }
 
     @GetMapping("/attend_session/{sessionId}")
-    public String getAttendSession(@PathVariable("sessionId") int sessionId, Model model, HttpSession httpSession){
-        log.info("Attend student called");
+    public String getAttendSession(@PathVariable("sessionId") int sessionId, Model model){
+        log.info("Attend session called");
+
+
+
+        return ATTEND_SESSION;
+    }
+
+    @PostMapping("/attend_session/")
+    public String getAttendSession(@RequestParam("sessionId") int sessionId, @RequestParam("sessionCode") String sessionCode, Model model, HttpSession httpSession){
 
         int studentId = Integer.parseInt(httpSession.getAttribute("login").toString().substring(1));
         Students student = studentsService.findById(studentId);
@@ -227,6 +251,10 @@ public class SessionsController {
             return REDIRECT + SESSIONS_LIST;
         }
 
+        if(!session.getSessionCode().equals(sessionCode)){
+            return REDIRECT + ATTEND_SESSION + "/" + sessionId;
+        }
+
         Attendance attendance = new Attendance();
 
         attendance.setStatus((byte) 1);
@@ -238,11 +266,11 @@ public class SessionsController {
 
         attendanceService.save(attendance);
 
-        return ATTEND_SESSION;
+        return REDIRECT+SESSIONS_LIST;
     }
 
     @GetMapping("/attend_student/{studentId}/{sessionId}")
-    public String getAttendStudent(@PathVariable("studentId") int studentId, @PathVariable("sessionId") int sessionId, Model model){
+    public String getAttendStudent(@PathVariable("studentId") int studentId, @PathVariable("sessionId") int sessionId, Model model, RedirectAttributes redAt){
         log.info("Attend student called");
 
         Students student = studentsService.findById(studentId);
@@ -259,11 +287,15 @@ public class SessionsController {
 
         attendanceService.save(attendance);
 
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Student is successfully attended to this session");
+
         return REDIRECT + SESSION_INFO + "/" + sessionId;
     }
 
     @GetMapping("/unattend_student/{studentId}/{sessionId}")
-    public String getUnattendStudent(@PathVariable("studentId") int studentId, @PathVariable("sessionId") int sessionId, Model model, HttpSession httpSession){
+    public String getUnattendStudent(@PathVariable("studentId") int studentId, @PathVariable("sessionId") int sessionId, Model model, RedirectAttributes redAt, HttpSession httpSession){
         log.info("Attend student called");
 
         Students student = studentsService.findById(studentId);
@@ -275,6 +307,10 @@ public class SessionsController {
                 attendanceService.delete(a);
             }
         }
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Student is successfully unattended from this session");
 
         return REDIRECT + SESSION_INFO + "/" + sessionId;
     }

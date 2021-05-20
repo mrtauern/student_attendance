@@ -19,28 +19,43 @@
     <table class="table table-striped">
       <thead class="thead-dark">
       <tr>
+        <th></th>
         <th>Date</th>
         <th>Course</th>
         <th>Teachers</th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
-      <tr th:each="s : ${sessions}">
+      <tr th:each="s : ${sessionList}">
+        <td th:switch="${s.active}">
+          <i th:case="true" class="fas fa-arrow-circle-right activeSession"></i>
+          <i th:case="false" class="far fa-circle inactiveSession"></i>
+        </td>
         <td th:text="${#dates.format(s.date, 'HH:mm dd/MM/yyyy')}"></td>
-        <td th:text="${s.course.name}"></td>
+        <td th:text="${s.courseName}"></td>
         <td>
-          <span th:each="t : ${s.course.teachers}" th:text="${t.firstname + ' ' + t.lastname + ', '}"></span>
+          <span th:each="t : ${s.teacherNames}" th:text="${t + ', '}"></span>
         </td>
         <td>
           <span th:switch="${sessionType}">
             <a th:case="t" th:href="${'/reveal_code/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-eye"></i> Reveal code</a>
-            <a th:case="s" th:href="${'/attend_session/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-user-check"></i> Attend</a>
+            <span th:case="s">
+              <a th:if="${s.active}" th:href="${'/attend_session/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-user-check"></i> Attend</a>
+            </span>
           </span>
           <a th:href="${'/session_info/' + s.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-ellipsis-h"></i> More</a>
         </td>
-        <td th:text="${#dates.minute(s.date) + 45}"></td>
+        <td th:switch="${s.attended}">
+          <span th:case="true" class="attended"><i class="fas fa-check"></i> Attended</span>
+          <span th:case="false" class="notAttended"><i class="fas fa-times"></i> Not attended</span>
+        </td>
+        <td th:switch="${s.verified}">
+          <span th:case="true" class="attended"><i class="fas fa-check"></i> Verified</span>
+          <span th:case="false" class="notAttended"><i class="fas fa-times"></i> Not verified</span>
+        </td>
       </tr>
       </tbody>
     </table>

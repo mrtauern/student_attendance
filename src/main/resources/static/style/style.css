@@ -377,12 +377,12 @@ span#logo span.red{
 }
 
 .attended{
-    color: #218838;
+    color: #28a745;
     font-weight: bold;
 }
 
 .notAttended{
-    color: #C82332;
+    color: #dc3545;
     font-weight: bold;
 }
 
@@ -417,4 +417,82 @@ div#navigation div#breadcrumb a{
 h2#sessionCode{
     text-align: center;
     font-size: 120px;
+}
+
+div#message{
+    position: fixed;
+    width: calc( 100% - 316px );
+    bottom: 50px;
+    display: none;
+}
+
+div#message.show{
+    display: block;
+}
+
+div#message div#innerMessage{
+    padding: 10px 20px;
+    position: relative;
+    margin: auto 0;
+    display: inline-block;
+    border-radius: 22px;
+}
+
+div#message div#innerMessage.success{
+    background-color: #28a745;
+    color: #FFFFFF;
+}
+
+div#message div#innerMessage.warning{
+    background-color: #ffc107;
+    color: #000000;
+}
+
+div#message div#innerMessage.warning a{
+    color: #000000;
+}
+
+div#message div#innerMessage.error{
+    background-color: #dc3545;
+    color: #FFFFFF;
+}
+
+div#message div#innerMessage.info{
+    background-color: #007bff;
+    color: #FFFFFF;
+}
+
+div#message div#innerMessage.unknown{
+    background-color: #6c757d;
+    color: #FFFFFF;
+}
+
+div#message div#innerMessage i{
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+div#message div#innerMessage a{
+    margin-left: 10px;
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+div#message div#innerMessage span{
+
+}
+
+i.activeSession{
+    color: #007bff;
+    animation: blinker 2s linear infinite;
+}
+
+i.inactiveSession{
+    color: #AAAAAA;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
 }

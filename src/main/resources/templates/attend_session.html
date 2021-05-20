@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:href="http://www.w3.org/1999/xhtml">
+<head th:include="fragments/head :: styles">
+    <!--<link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>-->
+</head>
+<body>
+<div class="container">
+    <header th:include="fragments/header :: indexbar"></header>
+
+    <div id="inner_container">
+
+        <H1>Attend session</H1>
+
+        <form method="Post" th:action="@{/attend_session}">
+            <input type="hidden" th:name="sessionId">
+            <input type="text" th:name="sessionCode">
+            <button type="submit">Attend</button>
+        </form>
+
+    </div>
+
+    <footer th:include="fragments/footer :: bottom"></footer>
+</div>
+</body>
+</html>
