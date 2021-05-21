@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <meta charset="UTF-8">
+  <title>Index</title>
+</head>
+<body>
+<H1>Student attendance</H1>
+
+<div class="container">
+  <header th:include="fragments/header :: indexbar"></header>
+
+  <div id="inner_container">
+
+    <h1>Course <span th:text="${course.name}"></span></h1>
+    <h2>Current classes</h2>
+    <!-- <a href="/new">Create New Class</a> -->
+    <a th:href="@{/createClassForm}" >Create New Class</a>
+    <br/><br/>
+    <table border="1" cellpadding="10">
+      <thead>
+      <tr>
+        <th>Class ID</th>
+        <th>Name</th>
+        <td>Action</td>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="class : ${classes}">
+        <td th:text="${class.id}">Class ID</td>
+        <td th:text="${class.classname}">Class Name</td>
+        <td>
+          <a th:href="@{/showClassUpdateForm/{id}(id=${class.id})}">Edit</a>
+          <a th:href="${'/removeClassFromCourse/'+{course.id}+'/'+{class.id}}">Remove From Course</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <form method="POST" th:action="@{/addClassToCourse}" th:object ="${newCourseClass}">
+
+      <input type="hidden" th:name="courseIdFk" th:value="${course.id}">
+      <select id="Class" name="Class" th:field="*{classIdFk}">
+        <span th:each="class : ${allClasses}">
+          <option th:value="${class.id}" th:text="${class.classname}"></option>
+        </span>
+      </select>
+      <button>Add to Course</button>
+
+    </form>
+
+  </div>
+
+
+</div>
+</body>
+</html>

@@ -7,4 +7,5 @@ import school.system.student_attendance.models.Sessions;
 
 @Repository("CoursesRepo")
 public interface CoursesRepo extends JpaRepository<Courses, Integer> {
+
 }

@@ -81,9 +81,9 @@ public class SessionsController {
         Timestamp ts2 = Timestamp.from(calendar3.toInstant());
         sessions.get(1).setDate(ts2);
 
-        String sessionId = httpSession.getAttribute("login").toString();
-        char sessionType = sessionId.charAt(0);
-        int studentId = Integer.parseInt(httpSession.getAttribute("login").toString().substring(1));
+        //String sessionId = httpSession.getAttribute("login").toString();
+        String sessionType = httpSession.getAttribute("login").toString();
+        int studentId = Integer.parseInt(httpSession.getAttribute("id").toString());
 
         List<SessionList> sessionList = new ArrayList<>();
 
@@ -112,7 +112,7 @@ public class SessionsController {
 
             sl.setActive(attendanceService.checkIfActive(s.getDate()));
 
-            if(sessionType == 's'){
+            if(sessionType.equals('s')){
                 for(Attendance a: attendances){
                     if(a.getSession().getId() == s.getId() && a.getStudent().getId() == studentId){
                         if(a.getStatus() == (byte) 1){
@@ -225,7 +225,7 @@ public class SessionsController {
     @PostMapping("/attend_session/")
     public String getAttendSession(@RequestParam("sessionId") int sessionId, @RequestParam("sessionCode") String sessionCode, Model model, HttpSession httpSession){
 
-        int studentId = Integer.parseInt(httpSession.getAttribute("login").toString().substring(1));
+        int studentId = Integer.parseInt(httpSession.getAttribute("id").toString());
         Students student = studentsService.findById(studentId);
         Sessions session = sessionsService.findById(sessionId);
         Timestamp ts = Timestamp.from(Instant.now());
@@ -316,7 +316,7 @@ public class SessionsController {
     }
 
     private boolean checkLogin(HttpSession session) {
-        String user = (String)session.getAttribute("login");
+        String user = (String)session.getAttribute("user");
         if(user != null) {
             return true;
         }else {

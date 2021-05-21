@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <meta charset="UTF-8">
+  <title>Index</title>
+</head>
+<body>
+<H1>Courses</H1>
+
+<div class="container">
+  <header th:include="fragments/header :: indexbar"></header>
+
+  <div id="inner_container">
+
+    <h1>Course List</h1>
+    <!-- <a href="/new">Create New Class</a> -->
+    <a th:href="@{/createCourseForm}" >Create New Course</a>
+    <br/><br/>
+    <table border="1" cellpadding="10">
+      <thead>
+      <tr>
+        <th>Course ID</th>
+        <th>Name</th>
+        <td>Action</td>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="c : ${listCourses}">
+        <td th:text="${c.id}">Course ID</td>
+        <td th:text="${c.name}">Course Name</td>
+        <td>
+          <a th:href="@{/showCourseUpdateForm/{id}(id=${c.id})}">Edit</a>
+          <a th:href="@{/deleteCourse/{id}(id=${c.id})}">Delete</a>
+          <a th:href="@{/addClassToCourse/{id}(id=${c.id})}">Classes</a>
+          <!--  <a th:href="/@{'/edit/' + ${product.id}}">Edit</a> -->
+          &nbsp;&nbsp;&nbsp;
+          <!-- <a th:href="/@{'/delete/' + ${product.id}}">Delete</a> -->
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+
+</div>
+</body>
+</html>

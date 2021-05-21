@@ -6,7 +6,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import school.system.student_attendance.models.Students;
 
+
 @Qualifier("StudentsRepo")
 @Repository
 public interface StudentsRepo extends JpaRepository<Students, Integer> {
+
 }

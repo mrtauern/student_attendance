@@ -62,7 +62,25 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="/omOs">About us</a>
+
+                    <a th:if="${sessionLogin}" class="nav-link front_page" href="/log_out">Log out</a>
+                    <a th:unless="${sessionLogin}" class="nav-link front_page" href="/login">Log ind</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link front_page fill" href="/classes">Classes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link front_page fill" href="/students">Students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link front_page fill" href="/courses">Courses</a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link front_page fill" href="/ipRanges">IP Ranges</a>
+
+                </li>
+
                 </li>
 
             </ul>

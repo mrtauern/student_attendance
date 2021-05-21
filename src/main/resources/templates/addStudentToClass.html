@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <meta charset="UTF-8">
+    <title>Add Student To Class</title>
+</head>
+<body>
+<H1>Add Student To Class</H1>
+
+<div class="container">
+    <header th:include="fragments/header :: indexbar"></header>
+
+    <div id="inner_container">
+
+        <h1>Student Class List</h1>
+        <!-- <a href="/new">Create New Class</a> -->
+        <a th:href="@{/createClassForm}" >Create New Class</a>
+        <br/><br/>
+        <table border="1" cellpadding="10">
+            <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Class ID</th>
+                <td>Action</td>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${studentInClass}">
+                <td th:text="${student.id}">Student ID</td>
+                <td th:text="${student.firstname}">Student Name</td>
+                <td>
+                   <!-- <a th:href="@{/showClassUpdateForm/{id}(id=${class.id})}">Edit</a>-->
+
+                    <a th:href="${'/removeStudentFromClass/'+{student.id}+'/'+{classId}}">Remove From class</a>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <form method="POST" th:action="@{/addStudentToClass}" th:object ="${newStudentClass}">
+
+            <input type="hidden" th:name="classIdFk" th:value="${classId}">
+            <select id="Student" name="Student" th:field="*{studentIdFk}">
+        <span th:each="student : ${studentsNotInClass}">
+          <option th:value="${student.id}" th:text="${student.firstname + ' ' + student.lastname}"></option>
+        </span>
+            </select>
+            <button>Add to Class</button>
+
+        </form>
+
+    </div>
+
+
+</div>
+</body>
+</html>
