@@ -11,8 +11,8 @@
 
         <H1>Attend session</H1>
 
-        <form method="Post" th:action="@{/attend_session}">
-            <input type="hidden" th:name="sessionId">
+        <form method="POST" th:action="@{/attend_session}">
+            <input type="hidden" th:name="sessionId" th:value="${sessionId}">
             <input type="text" th:name="sessionCode">
             <button type="submit">Attend</button>
         </form>

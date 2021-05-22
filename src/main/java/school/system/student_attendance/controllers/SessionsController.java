@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import school.system.student_attendance.models.*;
 import school.system.student_attendance.services.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -40,6 +41,12 @@ public class SessionsController {
 
     @Autowired
     AttendanceService attendanceService;
+
+    @Autowired
+    HttpRequestService httpRequestService;
+
+    @Autowired
+    IprangesService iprangesService;
 
     public String formatDate(Timestamp date){
 
@@ -72,6 +79,10 @@ public class SessionsController {
 
         List<Sessions> sessions = sessionsService.findAll();
         List<Attendance> attendances = attendanceService.findAll();
+
+        for (Attendance a: attendances) {
+            log.info(a.getStudent().getFirstname() + " " + a.getStudent().getLastname() + " attended: " + a.getStatus() + " verified: " + a.getNetworkVerified() + " session: " + a.getSession().getId());
+        }
 
         //Set test date
         Timestamp ts = Timestamp.from(Instant.now());
@@ -112,7 +123,9 @@ public class SessionsController {
 
             sl.setActive(attendanceService.checkIfActive(s.getDate()));
 
-            if(sessionType.equals('s')){
+            log.info("Session type: " + sessionType);
+
+            if(sessionType.equals("s")){
                 for(Attendance a: attendances){
                     if(a.getSession().getId() == s.getId() && a.getStudent().getId() == studentId){
                         if(a.getStatus() == (byte) 1){
@@ -145,8 +158,18 @@ public class SessionsController {
     }
 
     @GetMapping("/reveal_code/{id}")
-    public String getRevealCode(@PathVariable("id") int id, Model model){
+    public String getRevealCode(@PathVariable("id") int id, Model model, HttpSession httpSession, RedirectAttributes redAt){
         log.info("Reveal code called");
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
+        int studentId = Integer.parseInt(httpSession.getAttribute("id").toString());
 
         Sessions session = sessionsService.findById(id);
 
@@ -157,8 +180,18 @@ public class SessionsController {
     }
 
     @GetMapping("/session_info/{id}")
-    public String getSessionInfo(@PathVariable("id") int id, Model model){
+    public String getSessionInfo(@PathVariable("id") int id, Model model, HttpSession httpSession, RedirectAttributes redAt){
         log.info("Sessions info called");
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
+        int studentId = Integer.parseInt(httpSession.getAttribute("id").toString());
 
         Sessions session = sessionsService.findById(id);
 
@@ -208,27 +241,49 @@ public class SessionsController {
 
         model.addAttribute("pageTitle", "sessions info " + session.getCourse().getName() + " - " + formatDate(session.getDate()));
         model.addAttribute("thisSession", session);
+        model.addAttribute("sessionType", sessionType);
         model.addAttribute("attentionList", attendanceService.attendanceList(id));
 
         return SESSION_INFO;
     }
 
     @GetMapping("/attend_session/{sessionId}")
-    public String getAttendSession(@PathVariable("sessionId") int sessionId, Model model){
-        log.info("Attend session called");
+    public String getAttendSession(@PathVariable("sessionId") int sessionId, Model model, HttpSession httpSession, RedirectAttributes redAt, HttpServletRequest request){
+        log.info("Attend session getMapping called");
 
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
 
+        model.addAttribute("sessionId", sessionId);
 
         return ATTEND_SESSION;
     }
 
-    @PostMapping("/attend_session/")
-    public String getAttendSession(@RequestParam("sessionId") int sessionId, @RequestParam("sessionCode") String sessionCode, Model model, HttpSession httpSession){
+    @PostMapping("/attend_session")
+    public String getAttendSession(@RequestParam("sessionId") int sessionId, @RequestParam("sessionCode") String sessionCode, Model model, HttpSession httpSession, RedirectAttributes redAt, HttpServletRequest request){
+        log.info("Attend session postMapping called");
 
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
         int studentId = Integer.parseInt(httpSession.getAttribute("id").toString());
+
         Students student = studentsService.findById(studentId);
         Sessions session = sessionsService.findById(sessionId);
+
         Timestamp ts = Timestamp.from(Instant.now());
+
+        String ipAddress = httpRequestService.getClientIp(request);
+        boolean ipVerified = iprangesService.isIpAllowed(ipAddress);
 
         boolean studentOnCourse = false;
         for(Students s : session.getCourse().getStudents()){
@@ -248,10 +303,16 @@ public class SessionsController {
         }
 
         if (studentOnCourse == false){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You can't attend this course");
             return REDIRECT + SESSIONS_LIST;
         }
 
-        if(!session.getSessionCode().equals(sessionCode)){
+        if(!session.getSessionCode().equals(sessionCode.toUpperCase())){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "Wrong attendance code");
             return REDIRECT + ATTEND_SESSION + "/" + sessionId;
         }
 
@@ -259,19 +320,48 @@ public class SessionsController {
 
         attendance.setStatus((byte) 1);
         attendance.setTime(ts);
-        attendance.setNetworkVerified((byte) 0);
+        if (ipVerified == true) {
+            attendance.setNetworkVerified((byte) 1);
+        } else {
+            attendance.setNetworkVerified((byte) 0);
+        }
         attendance.setSession(session);
         attendance.setStudent(student);
 
 
         attendanceService.save(attendance);
 
+        if (ipVerified == true) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "You have attended the class");
+        } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "warning");
+            redAt.addFlashAttribute("message", "You have attended the class, but you haven't been verified");
+        }
         return REDIRECT+SESSIONS_LIST;
     }
 
     @GetMapping("/attend_student/{studentId}/{sessionId}")
-    public String getAttendStudent(@PathVariable("studentId") int studentId, @PathVariable("sessionId") int sessionId, Model model, RedirectAttributes redAt){
+    public String getAttendStudent(@PathVariable("studentId") int studentId, @PathVariable("sessionId") int sessionId, Model model, HttpSession httpSession, RedirectAttributes redAt){
         log.info("Attend student called");
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
+
+        if(!sessionType.equals("t")){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You don't have permission to do this");
+            return REDIRECT + SESSION_INFO + "/" + sessionId;
+        }
 
         Students student = studentsService.findById(studentId);
         Sessions session = sessionsService.findById(sessionId);
@@ -297,6 +387,22 @@ public class SessionsController {
     @GetMapping("/unattend_student/{studentId}/{sessionId}")
     public String getUnattendStudent(@PathVariable("studentId") int studentId, @PathVariable("sessionId") int sessionId, Model model, RedirectAttributes redAt, HttpSession httpSession){
         log.info("Attend student called");
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
+
+        if(!sessionType.equals("t")){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You don't have permission to do this");
+            return REDIRECT + SESSION_INFO + "/" + sessionId;
+        }
 
         Students student = studentsService.findById(studentId);
         Sessions session = sessionsService.findById(sessionId);

@@ -62,10 +62,17 @@
             <span th:case="1" class="attended"><i class="fas fa-check"></i> Verified</span>
             <span th:case="0" class="notAttended"><i class="fas fa-times"></i> Not verified</span>
           </td>
-          <td th:switch="${l.attendance}">
-            <a th:case="0" th:href="${'/attend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-check"></i></a>
-            <a th:case="1" th:href="${'/unattend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-times"></i></a>
-          </td>
+          <span th:switch="${sessionType}">
+            <span th:case="t">
+              <td th:switch="${l.attendance}">
+                <a th:case="0" th:href="${'/attend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-check"></i></a>
+                <a th:case="1" th:href="${'/unattend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-times"></i></a>
+              </td>
+            </span>
+            <span th:case="s">
+              <td></td>
+            </span>
+          </span>
         </tr>
         </tbody>
       </table>
