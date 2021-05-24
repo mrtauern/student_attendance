@@ -11,6 +11,33 @@
 
     <H1>Create session</H1>
 
+    <form th:action="@{/create_session}" method="POST">
+
+      <label>Time</label><br>
+      <select th:name="hour">
+        <th:block th:each="i: ${#numbers.sequence(0, 23)}">
+          <option th:value="${i}" th:text="${i}"></option>
+        </th:block>
+      </select>:
+
+      <select th:name="minute">
+        <th:block th:each="i: ${#numbers.sequence(0, 59)}">
+          <option th:value="${i}" th:text="${i}"></option>
+        </th:block>
+      </select>
+
+      <br><label>Date</label><br>
+      <input type="date" th:name="date" placeholder=" Date" class="form-control mb-4 col-4">
+
+      <label>Course</label><br>
+      <select th:name="course">
+        <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.name}"></option>
+      </select>
+
+      <br><br>
+
+      <button type="submit" class="form-control mb-4 col-4 btn btn-primary" >Create session</button>
+    </form>
   </div>
 
   <footer th:include="fragments/footer :: bottom"></footer>

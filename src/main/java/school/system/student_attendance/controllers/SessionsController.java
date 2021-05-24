@@ -14,12 +14,14 @@ import school.system.student_attendance.services.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.Date;
 
 @Controller
 public class SessionsController {
@@ -65,10 +67,18 @@ public class SessionsController {
     private final String REVEAL_CODE = "reveal_code";
     private final String SESSION_INFO = "session_info";
     private final String ATTEND_SESSION = "attend_session";
+    private final String CREATE_SESSION = "create_session";
 
     @GetMapping("/sessions_list")
-    public String getProductList(Model model, HttpSession httpSession, RedirectAttributes redAt){
+    public String getSessionList() {
         log.info("Sessions list called");
+
+        return REDIRECT + SESSIONS_LIST + "/today";
+    }
+
+    @GetMapping("/sessions_list/all")
+    public String getSessionListAll(Model model, HttpSession httpSession, RedirectAttributes redAt){
+        log.info("Sessions list all called");
 
         if(checkLogin(httpSession) == false) {
             redAt.addFlashAttribute("showMessage", true);
@@ -100,48 +110,66 @@ public class SessionsController {
 
         int i = 0;
         for(Sessions s: sessions){
-            sessionList.add(new SessionList());
-            SessionList sl = sessionList.get(i);
-            sl.setId(s.getId());
-            sl.setDate(s.getDate());
-            sl.setCourseName(s.getCourse().getName());
-            List<String> teacherNames = new ArrayList<>();
-            sl.setTeacherNames(teacherNames);
+            boolean studentOnCourse = false;
 
-            for(Teachers t: s.getCourse().getTeachers()){
-                if(t.getFirstname() != null) {
-                    sl.getTeacherNames().add(t.getFirstname() + " " + t.getLastname());
+            for(Students st : s.getCourse().getStudents()){
+                if(st.getId() == studentId){
+                    studentOnCourse = true;
                 }
             }
+
             for(Classes c: s.getCourse().getClasses()){
-                for(Teachers t: c.getTeachers()){
-                    if(t.getFirstname() != null) {
+                for(Students st: c.getStudents()){
+                    if(st.getId() == studentId){
+                        studentOnCourse = true;
+                    }
+                }
+            }
+
+            if(sessionType.equals("t") || studentOnCourse == true) {
+                sessionList.add(new SessionList());
+                SessionList sl = sessionList.get(i);
+                sl.setId(s.getId());
+                sl.setDate(s.getDate());
+                sl.setCourseName(s.getCourse().getName());
+                List<String> teacherNames = new ArrayList<>();
+                sl.setTeacherNames(teacherNames);
+
+                for (Teachers t : s.getCourse().getTeachers()) {
+                    if (t.getFirstname() != null) {
                         sl.getTeacherNames().add(t.getFirstname() + " " + t.getLastname());
                     }
                 }
-            }
-
-            sl.setActive(attendanceService.checkIfActive(s.getDate()));
-
-            log.info("Session type: " + sessionType);
-
-            if(sessionType.equals("s")){
-                for(Attendance a: attendances){
-                    if(a.getSession().getId() == s.getId() && a.getStudent().getId() == studentId){
-                        if(a.getStatus() == (byte) 1){
-                            sl.setAttended(true);
-                        } else {
-                            sl.setAttended(false);
-                        }
-                        if(a.getNetworkVerified() == (byte) 1){
-                            sl.setVerified(true);
-                        } else {
-                            sl.setVerified(false);
+                for (Classes c : s.getCourse().getClasses()) {
+                    for (Teachers t : c.getTeachers()) {
+                        if (t.getFirstname() != null) {
+                            sl.getTeacherNames().add(t.getFirstname() + " " + t.getLastname());
                         }
                     }
                 }
+
+                sl.setActive(attendanceService.checkIfActive(s.getDate()));
+
+                log.info("Session type: " + sessionType);
+
+                if (sessionType.equals("s")) {
+                    for (Attendance a : attendances) {
+                        if (a.getSession().getId() == s.getId() && a.getStudent().getId() == studentId) {
+                            if (a.getStatus() == (byte) 1) {
+                                sl.setAttended(true);
+                            } else {
+                                sl.setAttended(false);
+                            }
+                            if (a.getNetworkVerified() == (byte) 1) {
+                                sl.setVerified(true);
+                            } else {
+                                sl.setVerified(false);
+                            }
+                        }
+                    }
+                }
+                i++;
             }
-            i++;
         }
 
         for(SessionList sl: sessionList){
@@ -152,9 +180,216 @@ public class SessionsController {
         model.addAttribute("sessions", sessions);
         model.addAttribute("sessionList", sessionList);
         model.addAttribute("pageTitle", "sessions list");
+        model.addAttribute("showAll", true);
 
         return SESSIONS_LIST;
 
+    }
+
+    @GetMapping("/sessions_list/today")
+    public String getSessionListToday(Model model, HttpSession httpSession, RedirectAttributes redAt){
+        log.info("Sessions list today called");
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        List<Sessions> sessions = sessionsService.findAll();
+        List<Attendance> attendances = attendanceService.findAll();
+
+        for (Attendance a: attendances) {
+            log.info(a.getStudent().getFirstname() + " " + a.getStudent().getLastname() + " attended: " + a.getStatus() + " verified: " + a.getNetworkVerified() + " session: " + a.getSession().getId());
+        }
+
+        //Set test date
+        Timestamp ts = Timestamp.from(Instant.now());
+        Calendar calendar3 = Calendar.getInstance();
+        calendar3.setTime(ts);
+        calendar3.add(Calendar.MINUTE, -10);
+        Timestamp ts2 = Timestamp.from(calendar3.toInstant());
+        sessions.get(1).setDate(ts2);
+
+        //String sessionId = httpSession.getAttribute("login").toString();
+        String sessionType = httpSession.getAttribute("login").toString();
+        int studentId = Integer.parseInt(httpSession.getAttribute("id").toString());
+
+        List<SessionList> sessionList = new ArrayList<>();
+
+        int i = 0;
+        for(Sessions s: sessions){
+            boolean studentOnCourse = false;
+            boolean isToday = false;
+
+            for(Students st : s.getCourse().getStudents()){
+                if(st.getId() == studentId){
+                    studentOnCourse = true;
+                }
+            }
+
+            for(Classes c: s.getCourse().getClasses()){
+                for(Students st: c.getStudents()){
+                    if(st.getId() == studentId){
+                        studentOnCourse = true;
+                    }
+                }
+            }
+
+            Timestamp tsToday = Timestamp.from(Instant.now());
+            Calendar today = Calendar.getInstance();
+            today.setTime(tsToday);
+
+            Calendar cSession = Calendar.getInstance();
+            cSession.setTime(s.getDate());
+
+            if(today.get(Calendar.YEAR) == cSession.get(Calendar.YEAR)) {
+                if(today.get(Calendar.DAY_OF_YEAR) == cSession.get(Calendar.DAY_OF_YEAR)) {
+                    isToday = true;
+                }
+            }
+
+            if((sessionType.equals("t") || studentOnCourse == true) && isToday == true) {
+                sessionList.add(new SessionList());
+                SessionList sl = sessionList.get(i);
+                sl.setId(s.getId());
+                sl.setDate(s.getDate());
+                sl.setCourseName(s.getCourse().getName());
+                List<String> teacherNames = new ArrayList<>();
+                sl.setTeacherNames(teacherNames);
+
+                for (Teachers t : s.getCourse().getTeachers()) {
+                    if (t.getFirstname() != null) {
+                        sl.getTeacherNames().add(t.getFirstname() + " " + t.getLastname());
+                    }
+                }
+                for (Classes c : s.getCourse().getClasses()) {
+                    for (Teachers t : c.getTeachers()) {
+                        if (t.getFirstname() != null) {
+                            sl.getTeacherNames().add(t.getFirstname() + " " + t.getLastname());
+                        }
+                    }
+                }
+
+                sl.setActive(attendanceService.checkIfActive(s.getDate()));
+
+                log.info("Session type: " + sessionType);
+
+                if (sessionType.equals("s")) {
+                    for (Attendance a : attendances) {
+                        if (a.getSession().getId() == s.getId() && a.getStudent().getId() == studentId) {
+                            if (a.getStatus() == (byte) 1) {
+                                sl.setAttended(true);
+                            } else {
+                                sl.setAttended(false);
+                            }
+                            if (a.getNetworkVerified() == (byte) 1) {
+                                sl.setVerified(true);
+                            } else {
+                                sl.setVerified(false);
+                            }
+                        }
+                    }
+                }
+                i++;
+            }
+        }
+
+        for(SessionList sl: sessionList){
+            log.info(sl.toString());
+        }
+
+        model.addAttribute("sessionType", sessionType);
+        model.addAttribute("sessions", sessions);
+        model.addAttribute("sessionList", sessionList);
+        model.addAttribute("pageTitle", "sessions list");
+        model.addAttribute("showAll", false);
+
+        return SESSIONS_LIST;
+
+    }
+
+    @GetMapping("/create_session")
+    public String getCreateSession(Model model, HttpSession httpSession, RedirectAttributes redAt){
+        log.info("Create session get mapping called");
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
+
+        if(!sessionType.equals("t")){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You don't have permission to do this");
+            return REDIRECT + SESSIONS_LIST;
+        }
+
+        Sessions session = new Sessions();
+        List<Courses> courses = coursesService.findAll();
+
+        model.addAttribute("pageTitle", "Create session");
+        model.addAttribute("session", session);
+        model.addAttribute("courses", courses);
+
+        return CREATE_SESSION;
+    }
+
+    @PostMapping("/create_session")
+    public String getCreateSession(@RequestParam("hour") int hour, @RequestParam("minute") int minute, @RequestParam("date") String sDate, @RequestParam("course") int courseId, HttpSession httpSession, RedirectAttributes redAt){
+        log.info("Create session post mapping called");
+        log.info("Date: " + sDate);
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
+
+        if(!sessionType.equals("t")){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You don't have permission to do this");
+            return REDIRECT + SESSIONS_LIST;
+        }
+
+        Date date = new Date();
+
+        sDate = sDate + " " + hour + ":" +minute;
+
+        log.info("New date: " + sDate);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            date = dateFormat.parse(sDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String sessionCode = sessionsService.checkInCode();
+        Sessions session = new Sessions();
+        Courses course = coursesService.findById(courseId);
+
+        Timestamp ts=new Timestamp(date.getTime());
+
+        session.setDate(ts);
+        session.setSessionCode(sessionCode);
+        session.setCourse(course);
+
+        sessionsService.save(session);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Session successfully created");
+        return REDIRECT + SESSIONS_LIST;
     }
 
     @GetMapping("/reveal_code/{id}")
@@ -170,6 +405,13 @@ public class SessionsController {
 
         String sessionType = httpSession.getAttribute("login").toString();
         int studentId = Integer.parseInt(httpSession.getAttribute("id").toString());
+
+        if(!sessionType.equals("t")){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You don't have permission to do this");
+            return REDIRECT + SESSIONS_LIST;
+        }
 
         Sessions session = sessionsService.findById(id);
 
