@@ -1,8 +1,8 @@
 package school.system.student_attendance.services;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-import school.system.student_attendance.models.Attendance;
-import school.system.student_attendance.models.AttentionList;
+import school.system.student_attendance.models.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -22,4 +22,10 @@ public interface AttendanceService {
     List<AttentionList> attendanceList(int id);
 
     boolean checkIfActive(Timestamp timestamp);
+
+    public List<GetCourseAttendanceByStudent> getCourseAttendanceByStudent(int studentId);
+
+    public List<GetStudentAttendanceByCourse> getStudentAttendanceByCourse(int courseId);
+
+    public GetTotalAttendanceByStudent getTotalAttendanceByStudent(int studentId);
 }
