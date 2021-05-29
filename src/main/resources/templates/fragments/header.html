@@ -4,36 +4,36 @@
         <!-- Brand/logo -->
         <div class="container">
             <a class="navbar-brand" href="/landingPage">
-                <span id="logo">School <span class="red">Management</span></span>
+                <span id="logo">Student <span class="red">Attendance</span></span>
             </a>
 
             <!-- Links -->
             <ul class="navbar-nav mr-5">
                 <li class="nav-item">
-                    <a class="nav-link" href="/landingPage">Forside</a>
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
                 </li>
 
-                <li class="nav-item">
+                <!--<li class="nav-item">
 
                     <a class="nav-link" href="/inbox">
                         <i class="far fa-comment"></i>
 
                         <span id="countNotification" th:text="${numNotifications}"></span>
                     </a>
-                </li>
+                </li>-->
 
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <form action="/" th:action="@{/search}" method="post" class="form-inline" id="search_form">
                         <input type="text" th:name="searchJob" placeholder="Søg..." class="form-control mr-2">
                         <button class="btn btn-primary" type="submit">Søg</button>
                     </form>
-                </li>
+                </li>-->
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbardrop" href="#">Bruger Menu</a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbardrop" href="#">User menu</a>
                     <div class="dropdown-menu">
-                        <a href="/log_out" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Log af</a>
-                        <a href="/settings" class="dropdown-item"><i class="fas fa-user-edit"></i> Rediger oplysninger</a>
+                        <a href="/log_out" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Log out</a>
+                        <a href="/settings" class="dropdown-item"><i class="fas fa-user-edit"></i> Edit user information</a>
                         <a th:if="@{${loginType == 'w'}}" th:href="@{/showProfile}" class="dropdown-item"><i class="fas fa-address-card"></i> Se bruger oplysninger og CV</a>
                     </div>
                 </li>
@@ -48,12 +48,21 @@
         <!-- Brand/logo -->
         <div class="container">
             <a class="navbar-brand" href="/">
-                <span id="logo">VIKAR <span class="red">WORK</span></span>
+                <span id="logo">Student <span class="red">Attendance</span></span>
             </a>
 
             <!-- Links -->
             <ul class="navbar-nav mr-5">
                 <li class="nav-item">
+                    <a class="nav-link front_page fill" href="/login">Log in</a>
+                </li>
+                <!--<li class="nav-item">
+                    <a class="nav-link front_page fill" href="/createUser">Create user</a>
+                </li>-->
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/omOs">About us</a>
+
                     <a th:if="${sessionLogin}" class="nav-link front_page" href="/log_out">Log out</a>
                     <a th:unless="${sessionLogin}" class="nav-link front_page" href="/login">Log ind</a>
                 </li>
@@ -65,6 +74,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link front_page fill" href="/courses">Courses</a>
+
                 </li>
                 <li class="nav-item">
                     <a class="nav-link front_page fill" href="/ipRanges">IP Ranges</a>

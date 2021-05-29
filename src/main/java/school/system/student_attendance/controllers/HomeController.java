@@ -1,19 +1,28 @@
 package school.system.student_attendance.controllers;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 import school.system.student_attendance.models.*;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import school.system.student_attendance.services.SessionsService;
+import org.dom4j.rule.Mode;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import school.system.student_attendance.services.*;
 
 
+
 import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +35,9 @@ public class HomeController {
 
     HomeController() {
     }
+
+    @Autowired
+    SessionsService sessionsService;
 
     @Autowired
     StudentsService studentsService;
@@ -51,6 +63,7 @@ public class HomeController {
     private final String REDIRECT = "redirect:/";
     private final String INDEX = "index";
     private final String LANDING_PAGE = "landing_page";
+    private final String DASHBOARD = "dashboard";
     private final String LOGIN = "login";
     private final String CLASSES = "classes";
     private final String CREATECLASSFORM = "createClassForm";
@@ -69,6 +82,8 @@ public class HomeController {
     @GetMapping("/")
     public String index(HttpSession session, Model model) {
 
+        log.info(sessionsService.checkInCode());
+
         return INDEX;
     }
 
@@ -81,6 +96,7 @@ public class HomeController {
 
         boolean isAllowed = iprangesService.isIpAllowed(ipAddress);
         log.info("allowed? " + isAllowed);
+        isAllowed = true;
         model.addAttribute("sessionLogin", session.getAttribute("login"));
         if (isAllowed) {
             return LOGIN;
@@ -125,7 +141,18 @@ public class HomeController {
         }
 
         model.addAttribute("Students", "Success!");
-        return REDIRECT+CLASSES;
+
+        return REDIRECT+DASHBOARD;
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session) {
+        log.info("Called getmapping landing_page");
+        if(checkLogin(session) == false) {
+            return REDIRECT+LOGIN;
+        }else {
+            return DASHBOARD;
+        }
     }
 
     @GetMapping("/landing_page")
@@ -136,6 +163,7 @@ public class HomeController {
             return REDIRECT + LOGIN;
         } else {
             return LANDING_PAGE;
+
         }
     }
 

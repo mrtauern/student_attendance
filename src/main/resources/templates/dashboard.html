@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:href="http://www.w3.org/1999/xhtml">
+<head th:include="fragments/head :: styles">
+    <!--<link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>-->
+</head>
+<body>
+<div class="container">
+    <header th:include="fragments/header :: navbar"></header>
+
+    <div id="inner_container">
+
+        <H1>Hello! :D</H1>
+
+        <a href="/sessions_list">Sessions list</a>
+
+    </div>
+
+    <footer th:include="fragments/footer :: bottom"></footer>
+</div>
+</body>
+</html>

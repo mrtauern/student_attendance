@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:href="http://www.w3.org/1999/xhtml">
+<head th:include="fragments/head :: styles">
+  <!--<link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>-->
+</head>
+<body>
+<div class="container">
+  <header th:include="fragments/header :: navbar"></header>
+
+  <div id="inner_container">
+
+    <div id="navigation">
+      <div id="breadcrumb"><a href="/dashboard">Dashboard</a> / <a href="/sessions_list">Session list</a> / reveal code</div>
+      <a href="/sessions_list" id="back"><i class="fas fa-angle-left"></i> Session list</a>
+    </div>
+
+    <H1 th:text="${'Reveal code - ' + thisSession.course.name + ' - ' + #dates.format(thisSession.date, 'HH:mm dd/MM/yyyy')}"></H1>
+
+    <h2 id="sessionCode" th:text="${thisSession.sessionCode}"></h2>
+
+  </div>
+
+  <footer th:include="fragments/footer :: bottom"></footer>
+</div>
+</body>
+</html>

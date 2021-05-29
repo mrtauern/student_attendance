@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:href="http://www.w3.org/1999/xhtml">
+<head th:include="fragments/head :: styles">
+  <!--<link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>-->
+</head>
+<body>
+<div class="container">
+  <header th:include="fragments/header :: navbar"></header>
+
+  <div id="inner_container">
+
+    <div id="navigation">
+      <div id="breadcrumb"><a href="/dashboard">Dashboard</a> / <a href="/sessions_list">Session list</a> / session info</div>
+      <a href="/sessions_list" id="back"><i class="fas fa-angle-left"></i> Session list</a>
+    </div>
+
+    <H1 th:text="${'Session info - ' + thisSession.course.name + ' - ' + #dates.format(thisSession.date, 'HH:mm dd/MM/yyyy')}"></H1>
+
+    <h2>Students</h2>
+    <!--<table class="table table-striped">
+      <thead class="thead-dark">
+      <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="student : ${thisSession.course.students}">
+        <td th:text="${student.firstname}"></td>
+        <td th:text="${student.lastname}"></td>
+        <td th:text="${student.email}"></td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>-->
+
+    <span th:each="a : ${attentionList}">
+      <h3 th:text="${a.name}"></h3>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Email</th>
+          <th>Attendance</th>
+          <th>Verified</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="l : ${a.list}">
+          <td th:text="${l.firstname}"></td>
+          <td th:text="${l.lastname}"></td>
+          <td th:text="${l.email}"></td>
+          <td th:switch="${l.attendance}">
+            <span th:case="1" class="attended"><i class="fas fa-check"></i> Attended</span>
+            <span th:case="0" class="notAttended"><i class="fas fa-times"></i> Not attended</span>
+          </td>
+          <td th:switch="${l.networkVerified}">
+            <span th:case="1" class="attended"><i class="fas fa-check"></i> Verified</span>
+            <span th:case="0" class="notAttended"><i class="fas fa-times"></i> Not verified</span>
+          </td>
+          <span th:switch="${sessionType}">
+            <span th:case="t">
+              <td th:switch="${l.attendance}">
+                <a th:case="0" th:href="${'/attend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-check"></i></a>
+                <a th:case="1" th:href="${'/unattend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-times"></i></a>
+              </td>
+            </span>
+            <span th:case="s">
+              <td></td>
+            </span>
+          </span>
+        </tr>
+        </tbody>
+      </table>
+    </span>
+
+    <h2>Teachers</h2>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+      <tr>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="teacher : ${thisSession.course.teachers}">
+        <td th:text="${teacher.firstname}"></td>
+        <td th:text="${teacher.lastname}"></td>
+        <td th:text="${teacher.email}"></td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <span th:each="class : ${thisSession.course.classes}">
+      <h3 th:text="${class.classname}"></h3>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Email</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacher : ${class.teachers}">
+          <td th:text="${teacher.firstname}"></td>
+          <td th:text="${teacher.lastname}"></td>
+          <td th:text="${teacher.email}"></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </span>
+
+  </div>
+
+  <footer th:include="fragments/footer :: bottom"></footer>
+</div>
+</body>
+</html>

@@ -22,6 +22,26 @@ public class StudentsServiceImpl implements StudentsService {
     }
 
     @Override
+    public Students findById(int id) {
+        return studentsRepo.findById(id).get();
+    }
+
+    @Override
+    public Students save(Students student) {
+        return save(student);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        studentsRepo.deleteById(id);
+    }
+
+    @Override
+    public void delete(Students student) {
+        studentsRepo.delete(student);
+    }
+
+    @Override
     public List<Students> getAllStudents() {
         return (List<Students>) studentsRepo.findAll();
     }
@@ -76,6 +96,5 @@ public class StudentsServiceImpl implements StudentsService {
 
         return studentNotInClass;
     }
-
 
 }

@@ -9,6 +9,15 @@ import java.util.List;
 @Service("StudentsService")
 public interface StudentsService {
     Iterable<Students> findAll();
+
+    Students findById(int id);
+
+    Students save(Students student);
+
+    void deleteById(int id);
+
+    void delete(Students student);
+
     List<Students> getAllStudents();
     Students saveStudent(Students students);
     Students getStudentById(int id);
