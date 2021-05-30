@@ -9,6 +9,11 @@
 
   <div id="inner_container">
 
+    <div id="navigation">
+      <div id="breadcrumb"><a href="/dashboard">Dashboard</a> / <a href="/sessions_list">Session list</a> / Create session</div>
+      <a href="/sessions_list" id="back"><i class="fas fa-angle-left"></i> Session list</a>
+    </div>
+
     <H1>Create session</H1>
 
     <form th:action="@{/create_session}" method="POST">

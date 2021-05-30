@@ -9,10 +9,16 @@
 
   <div id="inner_container">
 
-    <div id="navigation">
-      <div id="breadcrumb"><a href="/dashboard">Dashboard</a> / <a href="/sessions_list">Session list</a> / <a th:href="${'/session_info/' + sessionId}">Session info</a> / Student statistic</div>
-      <a th:href="${'/session_info/' + sessionId}" id="back"><i class="fas fa-angle-left"></i> Session info</a>
-    </div>
+    <th:block th:switch="${sessionType}">
+      <div th:case="t" id="navigation">
+        <div id="breadcrumb"><a href="/dashboard">Dashboard</a> / <a href="/sessions_list">Session list</a> / <a th:href="${'/session_info/' + sessionId}">Session info</a> / Student statistic</div>
+        <a th:href="${'/session_info/' + sessionId}" id="back"><i class="fas fa-angle-left"></i> Session info</a>
+      </div>
+      <div th:case="s" id="navigation">
+        <div id="breadcrumb"><a href="/dashboard">Dashboard</a> / <a href="/sessions_list">Session list</a> / Student statistic</div>
+        <a href="/sessions_list" id="back"><i class="fas fa-angle-left"></i> Session list</a>
+      </div>
+    </th:block>
 
     <H1 th:text="${'Student statistic - ' + attendanceList[0].studentFirstname + ' ' + attendanceList[0].studentLastname}"></H1>
 
