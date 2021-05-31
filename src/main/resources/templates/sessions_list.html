@@ -25,6 +25,10 @@
       <a th:case="false" href="/sessions_list/all" class="btn btn-primary mr-2 btn-sm">Show all</a>
     </th:block>
 
+    <th:block th:switch="${sessionType}">
+      <a th:case="s" th:href="${'/student_statistic/' + studentId}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-chart-bar"></i> My statistic</a>
+    </th:block>
+
     <br><br>
 
     <table class="table table-striped">
@@ -54,10 +58,12 @@
           <span th:switch="${sessionType}">
             <a th:case="t" th:href="${'/reveal_code/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-eye"></i> Reveal code</a>
             <span th:case="s">
-              <a th:if="${s.active}" th:href="${'/attend_session/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-user-check"></i> Attend</a>
+              <a th:if="${s.active and !s.attended}" th:href="${'/attend_session/' + s.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-user-check"></i> Attend</a>
             </span>
           </span>
-          <a th:href="${'/session_info/' + s.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-ellipsis-h"></i> More</a>
+          <th:block th:switch="${sessionType}">
+            <a th:case="t" th:href="${'/session_info/' + s.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-ellipsis-h"></i> More</a>
+          </th:block>
         </td>
         <span th:switch="${sessionType}">
           <span th:case="s">

@@ -1,9 +1,13 @@
 package school.system.student_attendance.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import school.system.student_attendance.models.*;
 import school.system.student_attendance.repositories.AttendanceRepo;
+import school.system.student_attendance.repositories.GetCourseAttendanceByStudentRepo;
+import school.system.student_attendance.repositories.GetStudentAttendanceByCourseRepo;
+import school.system.student_attendance.repositories.GetTotalAttendanceByStudentRepo;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -20,6 +24,15 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Autowired
     AttendanceRepo attendanceRepo;
+
+    @Autowired
+    GetStudentAttendanceByCourseRepo getStudentAttendanceByCourseRepo;
+
+    @Autowired
+    GetCourseAttendanceByStudentRepo getCourseAttendanceByStudentRepo;
+
+    @Autowired
+    GetTotalAttendanceByStudentRepo getTotalAttendanceByStudentRepo;
 
     @Autowired
     SessionsService sessionsService;
@@ -124,5 +137,20 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
 
         return false;
+    }
+
+    @Override
+    public List<GetCourseAttendanceByStudent> getCourseAttendanceByStudent(int studentId) {
+        return getCourseAttendanceByStudentRepo.getCourseAttendanceByStudent(studentId);
+    }
+
+    @Override
+    public List<GetStudentAttendanceByCourse> getStudentAttendanceByCourse(int courseId) {
+        return getStudentAttendanceByCourseRepo.getStudentAttendanceByCourse(courseId);
+    }
+
+    @Override
+    public GetTotalAttendanceByStudent getTotalAttendanceByStudent(int studentId) {
+        return getTotalAttendanceByStudentRepo.getTotalAttendanceByStudent(studentId);
     }
 }

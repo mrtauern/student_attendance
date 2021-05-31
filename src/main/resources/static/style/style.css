@@ -54,6 +54,10 @@ h3{
     color: #E74C3C;
 }
 
+h3.statisticInfo{
+    color: #000000;
+}
+
 h4{
     margin: 10px 0 20px 0;
     font-weight: bold;
@@ -495,4 +499,28 @@ i.inactiveSession{
     50% {
         opacity: 0;
     }
+}
+
+.statisticStatus{
+    font-weight: bold;
+}
+
+.veryHigh{
+    color: #28a745;
+}
+
+.high{
+    color: #94b426;
+}
+
+.okay{
+    color: #ffc107;
+}
+
+.low{
+    color: #ee7b26;
+}
+
+.veryLow{
+    color: #dc3545;
 }

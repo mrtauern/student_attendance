@@ -68,6 +68,8 @@ public class SessionsController {
     private final String SESSION_INFO = "session_info";
     private final String ATTEND_SESSION = "attend_session";
     private final String CREATE_SESSION = "create_session";
+    private final String COURSE_STATISTIC = "course_statistic";
+    private final String STUDENT_STATISTIC = "student_statistic";
 
     @GetMapping("/sessions_list")
     public String getSessionList() {
@@ -177,6 +179,7 @@ public class SessionsController {
         }
 
         model.addAttribute("sessionType", sessionType);
+        model.addAttribute("studentId", studentId);
         model.addAttribute("sessions", sessions);
         model.addAttribute("sessionList", sessionList);
         model.addAttribute("pageTitle", "sessions list");
@@ -301,6 +304,7 @@ public class SessionsController {
         }
 
         model.addAttribute("sessionType", sessionType);
+        model.addAttribute("studentId", studentId);
         model.addAttribute("sessions", sessions);
         model.addAttribute("sessionList", sessionList);
         model.addAttribute("pageTitle", "sessions list");
@@ -434,6 +438,13 @@ public class SessionsController {
 
         String sessionType = httpSession.getAttribute("login").toString();
         int studentId = Integer.parseInt(httpSession.getAttribute("id").toString());
+
+        if(!sessionType.equals("t")){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You don't have permission to do this");
+            return REDIRECT + SESSIONS_LIST;
+        }
 
         Sessions session = sessionsService.findById(id);
 
@@ -672,4 +683,97 @@ public class SessionsController {
         }
     }
 
+    @GetMapping("/course_statistic/{courseId}/{sessionId}")
+    public String getCourseStatistic(@PathVariable("courseId") int courseId, @PathVariable("sessionId") int sessionId, Model model, RedirectAttributes redAt, HttpSession httpSession) {
+        log.info("Course statistic called");
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
+
+        if(!sessionType.equals("t")){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You don't have permission to do this");
+            return REDIRECT + SESSION_INFO + "/" + sessionId;
+        }
+
+        List<GetStudentAttendanceByCourse> getStudentAttendanceByCourseList = attendanceService.getStudentAttendanceByCourse(courseId);
+
+        model.addAttribute("pageTitle", "course statistic ");
+        model.addAttribute("attendanceList", getStudentAttendanceByCourseList);
+        model.addAttribute("sessionId", sessionId);
+
+        return COURSE_STATISTIC;
+    }
+
+    @GetMapping("/student_statistic/{studentId}")
+    public String getMyStatistic(@PathVariable("studentId") int studentId, Model model, RedirectAttributes redAt, HttpSession httpSession) {
+        log.info("Student statistic for student called");
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
+
+        List<GetCourseAttendanceByStudent> getCourseAttendanceByStudentList = attendanceService.getCourseAttendanceByStudent(studentId);
+        GetTotalAttendanceByStudent getTotalAttendanceByStudent = attendanceService.getTotalAttendanceByStudent(studentId);
+
+        for (GetCourseAttendanceByStudent s: getCourseAttendanceByStudentList) {
+            log.info(s.toString());
+        }
+
+        model.addAttribute("pageTitle", "course statistic ");
+        model.addAttribute("attendanceList", getCourseAttendanceByStudentList);
+        model.addAttribute("totalAttendance", getTotalAttendanceByStudent);
+        model.addAttribute("sessionId", 0);
+        model.addAttribute("sessionType", sessionType);
+
+        return STUDENT_STATISTIC;
+    }
+
+    @GetMapping("/student_statistic/{studentId}/{sessionId}")
+    public String getStudentStatistic(@PathVariable("studentId") int studentId, @PathVariable("sessionId") int sessionId, Model model, RedirectAttributes redAt, HttpSession httpSession) {
+        log.info("Student statistic for teacher called");
+
+        if(checkLogin(httpSession) == false) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You have to be logged in to see this page");
+            return REDIRECT+LOGIN;
+        }
+
+        String sessionType = httpSession.getAttribute("login").toString();
+
+        if(!sessionType.equals("t")){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You don't have permission to do this");
+            return REDIRECT + SESSION_INFO + "/" + sessionId;
+        }
+
+        List<GetCourseAttendanceByStudent> getCourseAttendanceByStudentList = attendanceService.getCourseAttendanceByStudent(studentId);
+        GetTotalAttendanceByStudent getTotalAttendanceByStudent = attendanceService.getTotalAttendanceByStudent(studentId);
+
+        for (GetCourseAttendanceByStudent s: getCourseAttendanceByStudentList) {
+            log.info(s.toString());
+        }
+
+        model.addAttribute("pageTitle", "course statistic ");
+        model.addAttribute("attendanceList", getCourseAttendanceByStudentList);
+        model.addAttribute("totalAttendance", getTotalAttendanceByStudent);
+        model.addAttribute("sessionId", sessionId);
+        model.addAttribute("sessionType", sessionType);
+
+        return STUDENT_STATISTIC;
+    }
 }

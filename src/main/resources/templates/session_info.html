@@ -16,6 +16,8 @@
 
     <H1 th:text="${'Session info - ' + thisSession.course.name + ' - ' + #dates.format(thisSession.date, 'HH:mm dd/MM/yyyy')}"></H1>
 
+    <a th:href="${'/course_statistic/' + thisSession.course.id + '/' + thisSession.id}" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-chart-bar"></i> Course statistic</a>
+
     <h2>Students</h2>
     <!--<table class="table table-striped">
       <thead class="thead-dark">
@@ -67,6 +69,7 @@
               <td th:switch="${l.attendance}">
                 <a th:case="0" th:href="${'/attend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-check"></i></a>
                 <a th:case="1" th:href="${'/unattend_student/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-user-times"></i></a>
+                <a th:href="${'/student_statistic/' + l.id + '/' + thisSession.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-chart-bar"></i></a>
               </td>
             </span>
             <span th:case="s">
