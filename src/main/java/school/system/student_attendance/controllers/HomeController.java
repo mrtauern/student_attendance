@@ -96,7 +96,7 @@ public class HomeController {
 
         boolean isAllowed = iprangesService.isIpAllowed(ipAddress);
         log.info("allowed? " + isAllowed);
-        isAllowed = true;
+        //isAllowed = true;
         model.addAttribute("sessionLogin", session.getAttribute("login"));
         if (isAllowed) {
             return LOGIN;

@@ -29,17 +29,20 @@
                     </form>
                 </li>-->
                 <li class="nav-item">
-                    <a class="nav-link front_page fill" href="/classes">Classes</a>
+                    <a class="nav-link" href="/sessions_list">Sessions</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link front_page fill" href="/students">Students</a>
+                    <a class="nav-link" href="/classes">Classes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link front_page fill" href="/courses">Courses</a>
+                    <a class="nav-link" href="/students">Students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/courses">Courses</a>
 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link front_page fill" href="/ipRanges">IP Ranges</a>
+                    <a class="nav-link" href="/ipRanges">IP Ranges</a>
 
                 </li>
 
@@ -47,8 +50,8 @@
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbardrop" href="#">User menu</a>
                     <div class="dropdown-menu">
                         <a href="/log_out" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Log out</a>
-                        <a href="/settings" class="dropdown-item"><i class="fas fa-user-edit"></i> Edit user information</a>
-                        <a th:if="@{${loginType == 'w'}}" th:href="@{/showProfile}" class="dropdown-item"><i class="fas fa-address-card"></i> Se bruger oplysninger og CV</a>
+                        <!--<a href="/settings" class="dropdown-item"><i class="fas fa-user-edit"></i> Edit user information</a>
+                        <a th:if="@{${loginType == 'w'}}" th:href="@{/showProfile}" class="dropdown-item"><i class="fas fa-address-card"></i> Se bruger oplysninger og CV</a>-->
                     </div>
                 </li>
 
@@ -67,20 +70,20 @@
 
             <!-- Links -->
             <ul class="navbar-nav mr-5">
-                <!--<li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link front_page fill" href="/login">Log in</a>
-                </li>-->
+                </li>
                 <!--<li class="nav-item">
                     <a class="nav-link front_page fill" href="/createUser">Create user</a>
                 </li>-->
 
                 <li class="nav-item">
-                    <!--<a class="nav-link" href="/omOs">About us</a>-->
+                    <a class="nav-link" href="/omOs">About us</a>
 
-                    <a th:if="${sessionLogin}" class="nav-link front_page" href="/log_out">Log out</a>
-                    <a th:unless="${sessionLogin}" class="nav-link front_page" href="/login">Log in</a>
+                    <!--<a th:if="${sessionLogin}" class="nav-link front_page" href="/log_out">Log out</a>
+                    <a th:unless="${sessionLogin}" class="nav-link front_page" href="/login">Log in</a>-->
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link front_page fill" href="/classes">Classes</a>
                 </li>
                 <li class="nav-item">
@@ -93,7 +96,7 @@
                 <li class="nav-item">
                     <a class="nav-link front_page fill" href="/ipRanges">IP Ranges</a>
 
-                </li>
+                </li>-->
 
                 </li>
 
