@@ -77,6 +77,8 @@ public class HomeController {
     private final String IPRANGES = "ipRanges";
     private final String NOTALLOWED = "notAllowed";
     private final String EDITIPRANGE = "editIpRangeForm";
+    private final String CREATECOURSEFORM = "createCourseForm";
+    private final String UPDATECOURSES = "updateCourses";
 
 
     @GetMapping("/")
@@ -448,6 +450,69 @@ public class HomeController {
 
             return REDIRECT + ADDCLASSTOCOURSE + "/" + courseId;
 
+        }
+    }
+
+    @GetMapping("/createCourseForm")
+    public String createCourse(HttpSession session, Model model) {
+        if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
+            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
+            return REDIRECT + LOGIN;
+        } else {
+            Courses courses = new Courses();
+            model.addAttribute("courses", courses);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+            log.info("  createCourseForm is called ");
+            return CREATECOURSEFORM;
+        }
+    }
+
+    @PostMapping("/saveCourse")
+    public String saveCourse(@ModelAttribute("course") Courses courses, HttpSession session, Model model) {
+        if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
+            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
+            return REDIRECT + LOGIN;
+        } else {
+
+            coursesService.save(courses);
+            log.info("  PostMapping saveCourse is called ");
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
+
+            return REDIRECT + COURSES;
+
+        }
+    }
+
+    @GetMapping("/showCourseUpdateForm/{id}")
+    public String showCourseUpdateForm(@PathVariable(value = "id") int id, Model model, HttpSession session) {
+        if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
+            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
+            return REDIRECT + LOGIN;
+        } else {
+
+            Courses courses = coursesService.getCourseById(id);
+            model.addAttribute("courses", courses);
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
+            log.info("  GetMapping showCourseUpdateForm is called ");
+
+            return UPDATECOURSES;
+
+        }
+    }
+
+    @GetMapping("/deleteCourse/{id}")
+    public String deleteCourse(@PathVariable(value = "id") int id, HttpSession session, Model model) {
+        if (checkLogin(session) == false || !session.getAttribute("login").equals('t')) {
+            log.info("redirect to login if not logged in or sessionattribute login !=t... sessionAttribute=" + session.getAttribute("login"));
+            return REDIRECT + LOGIN;
+        } else {
+            this.coursesService.deleteById(id);
+            log.info("  GetMapping deleteCourse is called ");
+            model.addAttribute("sessionLogin",session.getAttribute("login"));
+
+            return REDIRECT + COURSES;
         }
     }
 

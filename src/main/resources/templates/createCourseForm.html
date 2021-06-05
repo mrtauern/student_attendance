@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Create Course Form</title>
+</head>
+<body>
+  <div class="container">
+      <header th:include="fragments/header :: navbar"></header>
+
+      <div id="inner_container">
+          <h1>create course</h1>
+
+          <form action="#" th:action="@{/saveCourse}" th:object ="${courses}" method="POST">
+              <input type="text" th:field = "*{name}" placeholder=" course name" class="form-control mb-4 col-4">
+              <button type="submit" class="form-control mb-4 col-4" >create course</button>
+          </form>
+      </div>
+
+  </div>
+</body>
+</html>
